@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حاسبة الميزانية | the.budgetr</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: #0D5C63;
+  min-height: 100vh;
+  padding: 20px;
+  direction: rtl;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #FFF8F0;
+  border-radius: 24px;
+  padding: 40px 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  margin-bottom: 40px;
+}
+
+.logo {
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  direction: ltr;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.logo .the { font-family:'Space Grotesk'; font-weight:300; font-size:28px; color:#F4845F; }
+.logo .dot { font-family:'Space Grotesk'; font-weight:700; font-size:28px; color:#F4845F; }
+.logo .bud { font-family:'Space Grotesk'; font-weight:700; font-size:28px; color:#0D5C63; }
+
+h1 {
+  font-size: 32px;
+  font-weight: 900;
+  color: #1A1A2E;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.section {
+  margin-bottom: 35px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #0D5C63;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(13,92,99,0.2);
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1A1A2E;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 16px;
+  font-family: 'Tajawal', sans-serif;
+  border: 2px solid #0D5C63;
+  border-radius: 12px;
+  background: white;
+  color: #1A1A2E;
+  text-align: right;
+  transition: all 0.3s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #F4845F;
+  box-shadow: 0 0 0 3px rgba(244,132,95,0.1);
+}
+
+input::placeholder {
+  color: rgba(26,26,46,0.4);
+}
+
+.calculate-btn {
+  width: 100%;
+  padding: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Tajawal', sans-serif;
+  background: #F4845F;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: all 0.3s;
+}
+
+.calculate-btn:hover {
+  background: #e37550;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(244,132,95,0.3);
+}
+
+.calculate-btn:active {
+  transform: translateY(0);
+}
+
+.result {
+  margin-top: 30px;
+  padding: 30px;
+  background: #0D5C63;
+  border-radius: 16px;
+  display: none;
+}
+
+.result.show {
+  display: block;
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255,248,240,0.15);
+}
+
+.result-row:last-child {
+  border-bottom: none;
+}
+
+.result-label {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255,248,240,0.7);
+}
+
+.result-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #FFF8F0;
+}
+
+.result-total {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(255,248,240,0.3);
+  text-align: center;
+}
+
+.result-total-label {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(255,248,240,0.7);
+  margin-bottom: 10px;
+}
+
+.result-amount {
+  font-size: 48px;
+  font-weight: 900;
+  color: #FFF8F0;
+  margin-bottom: 15px;
+}
+
+.result-amount.positive {
+  color: #4CAF50;
+}
+
+.result-amount.negative {
+  color: #FF5252;
+}
+
+.result-message {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255,248,240,0.85);
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+.currency {
+  font-size: 32px;
+  margin-right: 5px;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 14px;
+  color: rgba(26,26,46,0.5);
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to left, transparent, rgba(13,92,99,0.2) 50%, transparent);
+  margin: 25px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="logo">
+    <span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span>
+  </div>
+  
+  <h1>حاسبة الميزانية التفصيلية</h1>
+  
+  <!-- INCOME SECTION -->
+  <div class="section">
+    <div class="section-title">الدخل الشهري</div>
+    
+    <div class="input-group">
+      <label for="income-salary">الراتب الأساسي</label>
+      <input type="number" id="income-salary" placeholder="0" min="0">
+    </div>
+    
+    <div class="input-group">
+      <label for="income-other">دخل إضافي (أخرى)</label>
+      <input type="number" id="income-other" placeholder="0" min="0">
+    </div>
+  </div>
+  
+  <!-- FIXED EXPENSES SECTION -->
+  <div class="section">
+    <div class="section-title">المصاريف الثابتة</div>
+    
+    <div class="input-group">
+      <label for="fixed-rent">الإيجار / السكن</label>
+      <input type="number" id="fixed-rent" placeholder="0" min="0">
+    </div>
+    
+    <div class="input-group">
+      <label for="fixed-bills">الفواتير (كهرباء، ماء، إنترنت)</label>
+      <input type="number" id="fixed-bills" placeholder="0" min="0">
+    </div>
+    
+    <div class="input-group">
+      <label for="fixed-subscriptions">الاشتراكات (نتفليكس، جيم، إلخ)</label>
+      <input type="number" id="fixed-subscriptions" placeholder="0" min="0">
+    </div>
+    
+    <div class="input-group">
+      <label for="fixed-installments">الأقساط (قرض، سيارة، إلخ)</label>
+      <input type="number" id="fixed-installments" placeholder="0" min="0">
+    </div>
+    
+    <div class="input-group">
+      <label for="fixed-other">مصاريف ثابتة أخرى</label>
+      <input type="number" id="fixed-other" placeholder="0" min="0">
+    </div>
+  </div>
+  
+  <!-- VARIABLE EXPENSES SECTION -->
+  <div class="section">
+    <div class="section-title">المصاريف المتغيرة</div>
+    
+    <div class="input-group">
+      <label for="variable-food">الطعام والبقالة</label>
+      <input type="number" id="variable-food" placeholder="0" min="0">
+    </div>
+    
+    <div class="input-group">
+      <label for="variable-transport">المواصلات والبنزين</label>
+      <input type="number" id="variable-transport" placeholder="0" min="0">
+    </div>
+    
+    <div class="input-group">
+      <label for="variable-entertainment">الترفيه والمطاعم</label>
+      <input type="number" id="variable-entertainment" placeholder="0" min="0">
+    </div>
+    
+    <div class="input-group">
+      <label for="variable-shopping">التسوق والملابس</label>
+      <input type="number" id="variable-shopping" placeholder="0" min="0">
+    </div>
+    
+    <div class="input-group">
+      <label for="variable-other">مصاريف متغيرة أخرى</label>
+      <input type="number" id="variable-other" placeholder="0" min="0">
+    </div>
+  </div>
+  
+  <button class="calculate-btn" onclick="calculate()">احسب الميزانية</button>
+  
+  <div class="result" id="result">
+    <div class="result-row">
+      <span class="result-label">إجمالي الدخل</span>
+      <span class="result-value" id="total-income">0 د.ك</span>
+    </div>
+    
+    <div class="result-row">
+      <span class="result-label">إجمالي المصاريف الثابتة</span>
+      <span class="result-value" id="total-fixed">0 د.ك</span>
+    </div>
+    
+    <div class="result-row">
+      <span class="result-label">إجمالي المصاريف المتغيرة</span>
+      <span class="result-value" id="total-variable">0 د.ك</span>
+    </div>
+    
+    <div class="result-row">
+      <span class="result-label">إجمالي المصاريف</span>
+      <span class="result-value" id="total-expenses">0 د.ك</span>
+    </div>
+    
+    <div class="result-total">
+      <div class="result-total-label">الفائض / العجز</div>
+      <div class="result-amount" id="surplus">
+        <span class="currency">د.ك</span>
+        <span id="amount">0</span>
+      </div>
+      <div class="divider"></div>
+      <div class="result-message" id="message"></div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    @the.budgetr
+  </div>
+</div>
+
+<script>
+function calculate() {
+  // Get income values
+  const incomeSalary = parseFloat(document.getElementById('income-salary').value) || 0;
+  const incomeOther = parseFloat(document.getElementById('income-other').value) || 0;
+  const totalIncome = incomeSalary + incomeOther;
+  
+  // Get fixed expenses
+  const fixedRent = parseFloat(document.getElementById('fixed-rent').value) || 0;
+  const fixedBills = parseFloat(document.getElementById('fixed-bills').value) || 0;
+  const fixedSubscriptions = parseFloat(document.getElementById('fixed-subscriptions').value) || 0;
+  const fixedInstallments = parseFloat(document.getElementById('fixed-installments').value) || 0;
+  const fixedOther = parseFloat(document.getElementById('fixed-other').value) || 0;
+  const totalFixed = fixedRent + fixedBills + fixedSubscriptions + fixedInstallments + fixedOther;
+  
+  // Get variable expenses
+  const variableFood = parseFloat(document.getElementById('variable-food').value) || 0;
+  const variableTransport = parseFloat(document.getElementById('variable-transport').value) || 0;
+  const variableEntertainment = parseFloat(document.getElementById('variable-entertainment').value) || 0;
+  const variableShopping = parseFloat(document.getElementById('variable-shopping').value) || 0;
+  const variableOther = parseFloat(document.getElementById('variable-other').value) || 0;
+  const totalVariable = variableFood + variableTransport + variableEntertainment + variableShopping + variableOther;
+  
+  const totalExpenses = totalFixed + totalVariable;
+  const surplus = totalIncome - totalExpenses;
+  
+  // Update result display
+  document.getElementById('total-income').textContent = totalIncome.toFixed(0) + ' د.ك';
+  document.getElementById('total-fixed').textContent = totalFixed.toFixed(0) + ' د.ك';
+  document.getElementById('total-variable').textContent = totalVariable.toFixed(0) + ' د.ك';
+  document.getElementById('total-expenses').textContent = totalExpenses.toFixed(0) + ' د.ك';
+  document.getElementById('amount').textContent = Math.abs(surplus).toFixed(0);
+  
+  const surplusDiv = document.getElementById('surplus');
+  const messageDiv = document.getElementById('message');
+  
+  if (surplus > 0) {
+    surplusDiv.className = 'result-amount positive';
+    const percentage = ((surplus / totalIncome) * 100).toFixed(0);
+    messageDiv.textContent = `ممتاز! لديك فائض ${percentage}% من دخلك. يمكنك ادخار هذا المبلغ أو استثماره لمستقبلك المالي.`;
+  } else if (surplus === 0) {
+    surplusDiv.className = 'result-amount';
+    messageDiv.textContent = 'ميزانيتك متوازنة تماماً. لكن حاول أن تترك مساحة للادخار الطارئ (على الأقل 10% من دخلك).';
+  } else {
+    surplusDiv.className = 'result-amount negative';
+    const percentage = ((Math.abs(surplus) / totalIncome) * 100).toFixed(0);
+    messageDiv.textContent = `تحذير! لديك عجز ${percentage}% من دخلك. مصاريفك أكثر من دخلك. راجع المصاريف المتغيرة وحاول تقليلها.`;
+  }
+  
+  document.getElementById('result').classList.add('show');
+  
+  // Scroll to result
+  document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Allow Enter key to calculate
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      calculate();
+    }
+  });
+});
+</script>
+
+</body>
+</html>
