@@ -97,12 +97,25 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
-  padding: 40px 0;
+  gap: 0;
+  padding: 20px 0 60px;
+  width: 100%;
+}
+
+.slide-gap {
+  height: 32px;
   width: 100%;
 }
 
 /* ── SLIDE ── */
+.slide-outer {
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  justify-content: center;
+  scroll-margin-top: 90px;
+}
+
 .slide {
   width: 1080px;
   height: 1350px;
@@ -113,7 +126,8 @@ body {
   flex-direction: column;
   border-radius: 16px;
   box-shadow: 0 24px 80px rgba(0,0,0,0.5);
-  scroll-margin-top: 90px;
+  transform-origin: top center;
+  flex-shrink: 0;
 }
 
 /* BG */
@@ -251,6 +265,31 @@ body {
 }
 .dot.active { background: var(--coral); transform: scale(1.4); }
 .dot:hover { background: rgba(255,255,255,0.6); }
+
+/* ── RESPONSIVE SCALING ── */
+@media (max-width: 1120px) {
+  body { padding: 0; }
+  .slide-outer {
+    width: 100vw;
+    overflow: hidden;
+    justify-content: center;
+  }
+  .slide {
+    transform-origin: top center;
+  }
+  .nav { padding: 10px 16px; }
+  .nav-btn { padding: 6px 14px; font-size: 12px; }
+}
+
+
+@media (max-width: 600px) {
+  .nav { padding: 8px 12px; }
+  .nav-logo { font-size: 16px; }
+  .nav-btn { padding: 6px 10px; font-size: 11px; }
+  .nav-counter { font-size: 11px; min-width: 40px; }
+  .slides-wrapper { margin-top: 56px; }
+}
+
 </style>
 </head>
 <body>
@@ -275,7 +314,7 @@ body {
 <!-- ══════════════════════════════════════════
      SLIDE 1 — COVER
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div>
   <div class="bg-blob"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
@@ -299,12 +338,13 @@ body {
     <span class="footer-pg">1 / 10</span>
   </div>
 </div>
+</div><div class="slide-gap"></div>
 
 
 <!-- ══════════════════════════════════════════
      SLIDE 2 — الفكرة الرئيسية & العقلية & الهدف
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
     <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
@@ -359,12 +399,13 @@ body {
     <span class="footer-pg">2 / 10</span>
   </div>
 </div>
+</div><div class="slide-gap"></div>
 
 
 <!-- ══════════════════════════════════════════
      SLIDE 3 — الأدوات والاستراتيجيات
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
     <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
@@ -421,12 +462,13 @@ body {
     <span class="footer-pg">3 / 10</span>
   </div>
 </div>
+</div><div class="slide-gap"></div>
 
 
 <!-- ══════════════════════════════════════════
      SLIDE 4 — السلوك في السوق
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
     <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
@@ -495,12 +537,13 @@ body {
     <span class="footer-pg">4 / 10</span>
   </div>
 </div>
+</div><div class="slide-gap"></div>
 
 
 <!-- ══════════════════════════════════════════
      SLIDE 5 — المخاطر والأخطاء
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
     <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
@@ -561,12 +604,13 @@ body {
     <span class="footer-pg">5 / 10</span>
   </div>
 </div>
+</div><div class="slide-gap"></div>
 
 
 <!-- ══════════════════════════════════════════
      SLIDE 6 — المهارات والشخصية
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
     <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
@@ -629,12 +673,13 @@ body {
     <span class="footer-pg">6 / 10</span>
   </div>
 </div>
+</div><div class="slide-gap"></div>
 
 
 <!-- ══════════════════════════════════════════
      SLIDE 7 — نقاط القوة والضعف والمحرك
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
     <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
@@ -697,12 +742,13 @@ body {
     <span class="footer-pg">7 / 10</span>
   </div>
 </div>
+</div><div class="slide-gap"></div>
 
 
 <!-- ══════════════════════════════════════════
      SLIDE 8 — العادات وإدارة المخاطر
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
     <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
@@ -765,12 +811,13 @@ body {
     <span class="footer-pg">8 / 10</span>
   </div>
 </div>
+</div><div class="slide-gap"></div>
 
 
 <!-- ══════════════════════════════════════════
      SLIDE 9 — التوزيع المقترح + الاستثمار الإسلامي
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
     <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
@@ -841,12 +888,13 @@ body {
     <span class="footer-pg">9 / 10</span>
   </div>
 </div>
+</div><div class="slide-gap"></div>
 
 
 <!-- ══════════════════════════════════════════
      SLIDE 10 — الخلاصة النهائية
 ══════════════════════════════════════════ -->
-<div class="slide">
+<div class="slide-outer"><div class="slide">
   <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
   <div class="topbar">
     <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
@@ -937,5 +985,32 @@ const obs = new IntersectionObserver((entries) => {
 slides.forEach(s => obs.observe(s));
 </script>
 
+<script>
+// Responsive slide scaling
+function scaleSlides() {
+  const vw = window.innerWidth;
+  const slideWidth = 1080;
+  const slides = document.querySelectorAll('.slide');
+  const outers = document.querySelectorAll('.slide-outer');
+  const gaps = document.querySelectorAll('.slide-gap');
+  if (vw < slideWidth) {
+    const scale = vw / slideWidth;
+    const scaledH = 1350 * scale;
+    slides.forEach(s => {
+      s.style.transform = 'scale(' + scale + ')';
+      s.style.transformOrigin = 'top center';
+      s.style.marginBottom = '-' + (1350 * (1 - scale)) + 'px';
+    });
+    outers.forEach(o => { o.style.height = scaledH + 'px'; o.style.overflow = 'hidden'; });
+    gaps.forEach(g => { g.style.height = '16px'; });
+  } else {
+    slides.forEach(s => { s.style.transform = ''; s.style.marginBottom = ''; });
+    outers.forEach(o => { o.style.height = ''; o.style.overflow = ''; });
+    gaps.forEach(g => { g.style.height = '32px'; });
+  }
+}
+scaleSlides();
+window.addEventListener('resize', scaleSlides);
+</script>
 </body>
 </html>
