@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>the.budgetr — دليل المستثمر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&family=Montserrat:wght@600;700;800&family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #0D5C63;
+  --navy: #1A1A2E;
+  --coral: #F4845F;
+  --cream: #FFF8F0;
+  --text: #1A1A2E;
+  --muted: rgba(26,26,46,0.6);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  background: #111;
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: rgba(10,10,10,0.97);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  direction: ltr;
+}
+.nav-logo { font-family:'Space Grotesk',sans-serif; font-size:18px; }
+.nav-logo .the { font-weight:300; color:#F4845F; }
+.nav-logo .dot { font-weight:700; color:#F4845F; }
+.nav-logo .bud { font-weight:700; color:#fff; }
+.nav-controls { display:flex; align-items:center; gap:8px; }
+.nav-btn {
+  background:rgba(255,255,255,0.09); border:1px solid rgba(255,255,255,0.13);
+  color:#fff; padding:7px 14px; border-radius:7px; cursor:pointer;
+  font-family:'Montserrat',sans-serif; font-size:12px; font-weight:600;
+  transition:all 0.2s; white-space:nowrap;
+}
+.nav-btn:hover { background:rgba(244,132,95,0.25); border-color:#F4845F; color:#F4845F; }
+.nav-counter { font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700; color:rgba(255,255,255,0.4); min-width:44px; text-align:center; }
+
+/* ── SLIDE SCALER ──
+   This is the magic: we keep each slide at exactly 1080×1350
+   but wrap it in a container that scales it to fit the viewport.
+   The outer div is sized to match the scaled height.
+   This way nothing ever overflows. */
+.slides-wrapper {
+  margin-top: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0 60px;
+}
+
+.slide-scaler {
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.slide-inner {
+  width: 1080px;
+  flex-shrink: 0;
+  transform-origin: top center;
+}
+
+/* ── SLIDE ── */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  background: #FFF8F0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+/* BG DECO */
+.bg-c1 { position:absolute; width:520px; height:520px; border-radius:50%; border:70px solid rgba(13,92,99,0.05); top:-160px; left:-160px; pointer-events:none; }
+.bg-c2 { position:absolute; width:320px; height:320px; border-radius:50%; border:50px solid rgba(13,92,99,0.04); bottom:60px; right:-100px; pointer-events:none; }
+.bg-blob { position:absolute; width:500px; height:380px; background:radial-gradient(ellipse, rgba(13,92,99,0.06) 0%, transparent 70%); bottom:100px; left:40px; pointer-events:none; }
+.bg-dot-grid { position:absolute; inset:0; pointer-events:none; background-image:radial-gradient(circle, rgba(13,92,99,0.07) 1.5px, transparent 1.5px); background-size:44px 44px; opacity:0.6; }
+
+/* LOGO */
+.logo { font-family:'Space Grotesk',sans-serif; font-size:28px; line-height:1; direction:ltr; display:inline-block; }
+.logo .the { font-weight:300; color:var(--coral); }
+.logo .dot { font-weight:700; color:var(--coral); }
+.logo .bud { font-weight:700; color:var(--text); }
+
+/* TOPBAR */
+.topbar { display:flex; justify-content:flex-start; align-items:center; padding:50px 64px 0 64px; position:relative; z-index:10; }
+.topbar-label { font-family:'Montserrat',sans-serif; font-size:13px; font-weight:600; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; direction:ltr; }
+
+.div { height:1px; background:linear-gradient(to left, transparent, rgba(13,92,99,0.22), transparent); margin:0 64px; }
+.content { flex:1; padding:0 64px; display:flex; flex-direction:column; justify-content:center; position:relative; z-index:5; }
+.footer { padding:0 64px 44px; display:flex; justify-content:space-between; align-items:center; position:relative; z-index:10; }
+.footer .logo { font-size:20px; }
+.footer-pg { font-family:'Montserrat',sans-serif; font-size:13px; font-weight:600; color:var(--muted); direction:ltr; }
+
+.headline { font-family:'Tajawal',sans-serif; font-weight:900; font-size:80px; line-height:1.2; color:var(--text); text-align:center; margin-bottom:20px; }
+.headline .h { color:var(--coral); }
+.h { color:var(--coral); font-weight:700; }
+.sub { font-size:26px; font-weight:400; color:var(--muted); text-align:center; line-height:1.6; }
+.stitle { font-family:'Tajawal',sans-serif; font-weight:900; font-size:52px; line-height:1.25; color:var(--text); margin-bottom:8px; }
+.stitle .h { color:var(--coral); }
+.sdesc { font-size:22px; font-weight:400; color:var(--muted); line-height:1.5; }
+
+.pillars { display:flex; gap:20px; justify-content:center; }
+.pillar { flex:1; border-radius:16px; padding:28px 20px; text-align:center; }
+.pillar.p1 { background:rgba(13,92,99,0.09); border:2px solid rgba(13,92,99,0.2); }
+.pillar.p2 { background:rgba(26,26,46,0.07); border:2px solid rgba(26,26,46,0.14); }
+.pillar.p3 { background:rgba(244,132,95,0.09); border:2px solid rgba(244,132,95,0.28); }
+.pillar .pi { font-size:36px; display:block; margin-bottom:12px; }
+.pillar .pn { font-family:'Tajawal',sans-serif; font-weight:700; font-size:26px; display:block; }
+.pillar.p1 .pn { color:var(--green); }
+.pillar.p2 .pn { color:var(--navy); }
+.pillar.p3 .pn { color:#B85C36; }
+
+.ct { width:100%; border-collapse:collapse; margin-top:18px; }
+.ct th { padding:16px 14px; font-family:'Tajawal',sans-serif; font-size:21px; font-weight:700; text-align:center; }
+.ct th.th-label { font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); text-align:right; width:115px; background:transparent; }
+.ct th.th-p { background:rgba(13,92,99,0.12); color:#0D5C63; border-radius:10px 0 0 0; }
+.ct th.th-a { background:rgba(26,26,46,0.09); color:#1A1A2E; }
+.ct th.th-s { background:rgba(244,132,95,0.13); color:#B85C36; border-radius:0 10px 0 0; }
+.ct td { padding:18px 14px; font-size:19px; line-height:1.6; vertical-align:top; border-bottom:1px solid rgba(13,92,99,0.08); }
+.ct tr:last-child td { border-bottom:none; }
+.ct td.td-label { font-weight:700; font-size:16px; color:var(--text); text-align:right; width:115px; border-left:2.5px solid rgba(13,92,99,0.14); padding-right:8px; background:rgba(13,92,99,0.025); }
+.ct td.td-p { color:#0D5C63; background:rgba(13,92,99,0.03); text-align:center; }
+.ct td.td-a { color:#1A1A2E; background:rgba(26,26,46,0.02); text-align:center; }
+.ct td.td-s { color:#8B4513; background:rgba(244,132,95,0.03); text-align:center; }
+.ct tr:nth-child(even) td.td-p { background:rgba(13,92,99,0.06); }
+.ct tr:nth-child(even) td.td-a { background:rgba(26,26,46,0.04); }
+.ct tr:nth-child(even) td.td-s { background:rgba(244,132,95,0.055); }
+
+.ibox { background:rgba(13,92,99,0.07); border-right:4px solid var(--green); border-radius:0 10px 10px 0; padding:16px 20px; margin-top:20px; font-size:19px; color:var(--text); line-height:1.6; }
+.ibox-lbl { font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--green); margin-bottom:6px; display:block; }
+.wbox { background:rgba(244,132,95,0.08); border-right:4px solid var(--coral); border-radius:0 10px 10px 0; padding:16px 20px; margin-top:16px; font-size:19px; color:#7a3010; line-height:1.6; }
+.wbox-lbl { font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--coral); margin-bottom:6px; display:block; }
+
+.alloc-row { display:flex; gap:16px; margin-top:28px; }
+.ac { flex:1; border-radius:14px; padding:26px 18px; text-align:center; }
+.ac.ap { background:rgba(13,92,99,0.09); border:2px solid rgba(13,92,99,0.2); }
+.ac.aa { background:rgba(26,26,46,0.08); border:2px solid rgba(26,26,46,0.15); }
+.ac.as_ { background:rgba(244,132,95,0.09); border:2px solid rgba(244,132,95,0.28); }
+.ac-pct { font-family:'Montserrat',sans-serif; font-weight:800; font-size:44px; display:block; margin-bottom:6px; }
+.ac.ap .ac-pct { color:var(--green); }
+.ac.aa .ac-pct { color:var(--navy); }
+.ac.as_ .ac-pct { color:#B85C36; }
+.ac-name { font-family:'Tajawal',sans-serif; font-weight:700; font-size:20px; display:block; margin-bottom:8px; }
+.ac.ap .ac-name { color:var(--green); }
+.ac.aa .ac-name { color:var(--navy); }
+.ac.as_ .ac-name { color:#B85C36; }
+.ac-desc { font-size:15px; color:var(--muted); line-height:1.5; }
+
+.rule-cards { display:flex; flex-direction:column; gap:14px; margin-top:14px; }
+.rc { display:flex; align-items:flex-start; gap:16px; background:white; border-radius:12px; padding:18px 20px; border:1px solid rgba(13,92,99,0.1); }
+.rc-icon { width:46px; height:46px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.rc-icon.rp { background:rgba(13,92,99,0.12); }
+.rc-icon.ra { background:rgba(26,26,46,0.09); }
+.rc-icon.rs { background:rgba(244,132,95,0.13); }
+.rc-body strong { font-size:18px; font-weight:700; display:block; margin-bottom:4px; }
+.rc-body.rp strong { color:var(--green); }
+.rc-body.ra strong { color:var(--navy); }
+.rc-body.rs strong { color:#8B4513; }
+.rc-body p { font-size:16px; color:var(--muted); line-height:1.5; }
+
+.isbox { background:rgba(13,92,99,0.06); border:1px solid rgba(13,92,99,0.2); border-radius:12px; padding:16px 18px; margin-top:16px; font-size:16px; color:var(--text); line-height:1.7; }
+.isbox-lbl { font-family:'Montserrat',sans-serif; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--green); margin-bottom:6px; display:block; }
+
+/* Dot nav */
+.scroll-dots { position:fixed; right:12px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:8px; z-index:999; }
+.dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.2); cursor:pointer; transition:all 0.2s; border:none; }
+.dot.active { background:#F4845F; transform:scale(1.5); }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+  <div class="nav-controls">
+    <button class="nav-btn" onclick="prevSlide()">← السابق</button>
+    <span class="nav-counter" id="nav-counter">1 / 10</span>
+    <button class="nav-btn" onclick="nextSlide()">التالي →</button>
+  </div>
+</div>
+
+<div class="scroll-dots" id="scroll-dots">
+<button class="dot active" onclick="goToSlide(0)"></button><button class="dot" onclick="goToSlide(1)"></button><button class="dot" onclick="goToSlide(2)"></button><button class="dot" onclick="goToSlide(3)"></button><button class="dot" onclick="goToSlide(4)"></button><button class="dot" onclick="goToSlide(5)"></button><button class="dot" onclick="goToSlide(6)"></button><button class="dot" onclick="goToSlide(7)"></button><button class="dot" onclick="goToSlide(8)"></button><button class="dot" onclick="goToSlide(9)"></button>
+</div>
+
+<div class="slides-wrapper" id="slides-wrapper">
+
+
+
+<!-- ══════════════════════════════════════════
+     SLIDE 1 — COVER
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div>
+  <div class="bg-blob"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">دليل المستثمر</span>
+  </div>
+  <div class="content" style="justify-content:center; text-align:center; padding-top:20px;">
+    <div style="font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--coral); background:rgba(244,132,95,0.1); border:1px solid rgba(244,132,95,0.3); padding:8px 22px; border-radius:20px; display:inline-block; margin-bottom:36px;">
+      INVESTOR GUIDE
+    </div>
+    <div class="headline">أنت <span class="h">أيّ نوع</span><br>من المستثمرين؟</div>
+    <p class="sub">الفرق بين المستثمر السلبي، النشط، والمضارب<br>دليل شامل لمساعدتك على اتخاذ قرار واعي</p>
+    <div class="pillars">
+      <div class="pillar p1"><span class="pi">🌱</span><span class="pn">المستثمر السلبي</span></div>
+      <div class="pillar p2"><span class="pi">🔍</span><span class="pn">المستثمر النشط</span></div>
+      <div class="pillar p3"><span class="pi">⚡</span><span class="pn">المستثمر المضارب</span></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">1 / 10</span>
+  </div>
+</div>
+</div></div>
+<!-- ══════════════════════════════════════════
+     SLIDE 2 — الفكرة الرئيسية & العقلية & الهدف
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">الفكرة والهدف</span>
+  </div>
+  <div style="height:24px;"></div>
+  <div class="div"></div>
+  <div class="content" style="padding-top:28px; padding-bottom:28px; justify-content:flex-start;">
+    <div class="stitle">الفكرة <span class="h">&</span> الهدف</div>
+    <div class="sdesc">ما الذي يريده كل نوع من المستثمرين فعلاً؟</div>
+    <table class="ct" style="margin-top:20px;">
+      <thead><tr>
+        <th class="th-label">البند</th>
+        <th class="th-p">🌱 السلبي</th>
+        <th class="th-a">🔍 النشط</th>
+        <th class="th-s">⚡ المضارب</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-label">الفكرة</td>
+          <td class="td-p">لا يسعى للتفوق على السوق — يهدف إلى <span class="h">النمو معه</span> على المدى البعيد</td>
+          <td class="td-a">يسعى إلى <span class="h">أداء أفضل</span> من متوسط السوق باختيار استثمارات أجود</td>
+          <td class="td-s">يقبل <span class="h">مخاطر مرتفعة</span> مقابل عوائد كبيرة من فرص غير مؤكدة</td>
+        </tr>
+        <tr>
+          <td class="td-label">العقلية</td>
+          <td class="td-p">الثروة تُبنى بالصبر والاستمرارية والزمن</td>
+          <td class="td-a">الثروة تُبنى بالبحث والتحليل وحسن التوقيت</td>
+          <td class="td-s">ثروة ممكنة — لكن <span class="h">الخسائر قد تكون كبيرة وسريعة</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">الهدف</td>
+          <td class="td-p"><span class="h">التقاعد والحرية المالية</span> والاستقرار طويل الأمد</td>
+          <td class="td-a"><span class="h">التفوق على السوق</span> عبر اختيار استثمارات أفضل</td>
+          <td class="td-s">اقتناص فرص ذات <span class="h">عوائد محتملة مرتفعة</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">الهوية</td>
+          <td class="td-p">🌱 <strong>مستثمر</strong></td>
+          <td class="td-a">🔍 <strong>مستثمر ومحلل</strong></td>
+          <td class="td-s">⚡ <strong>مضارب / متداول</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="ibox">
+      <span class="ibox-lbl">💡 الخلاصة</span>
+      السلبي ينجح بالاستمرارية — النشط حين يكون صائباً أكثر من السوق — المضارب حين يُبقي خسائره صغيرة
+    </div>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">2 / 10</span>
+  </div>
+</div>
+</div></div>
+<!-- ══════════════════════════════════════════
+     SLIDE 3 — الأدوات والاستراتيجيات
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">الأدوات والاستراتيجيات</span>
+  </div>
+  <div style="height:24px;"></div>
+  <div class="div"></div>
+  <div class="content" style="padding-top:28px; padding-bottom:28px; justify-content:flex-start;">
+    <div class="stitle">الأدوات <span class="h">&</span> الاستراتيجيات</div>
+    <div class="sdesc">ماذا يستخدم كل مستثمر؟</div>
+    <table class="ct" style="margin-top:20px;">
+      <thead><tr>
+        <th class="th-label">البند</th>
+        <th class="th-p">🌱 السلبي</th>
+        <th class="th-a">🔍 النشط</th>
+        <th class="th-s">⚡ المضارب</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-label">الأدوات الرئيسية</td>
+          <td class="td-p">صناديق مؤشرات، S&P 500، صناديق عالمية، <span class="h">صناديق شرعية</span>، صكوك</td>
+          <td class="td-a">أسهم فردية، صناديق نشطة، <span class="h">أسهم نمو وقيمة وتوزيعات</span></td>
+          <td class="td-s">اكتتابات، عملات رقمية، <span class="h">أسهم رائجة</span>، شركات ناشئة، زخم قصير</td>
+        </tr>
+        <tr>
+          <td class="td-label">الاستراتيجيات</td>
+          <td class="td-p">DCA منتظم، تنويع، احتفاظ طويل، <span class="h">شراء واحتفاظ</span></td>
+          <td class="td-a">انتقاء أسهم، استثمار قيمي ونمو، <span class="h">تدوير قطاعات</span></td>
+          <td class="td-s">تداول زخم، موجات رائجة، مضاربة عملات، <span class="h">رهانات أحداث</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">دور DCA</td>
+          <td class="td-p"><span class="h">أساسي جداً</span> — يستثمر شهرياً بصرف النظر عن السوق</td>
+          <td class="td-a">اختياري — يعتمد على التقييم والتوقيت</td>
+          <td class="td-s"><span class="h">خطير إن أُسيء استخدامه</span> — يضاعف الخسائر في أصول مضاربية</td>
+        </tr>
+        <tr>
+          <td class="td-label">التنويع</td>
+          <td class="td-p"><span class="h">أساسي</span> — أهم وسائل الحماية</td>
+          <td class="td-a">مهم لكن قد يركّز في قناعات قوية</td>
+          <td class="td-s"><span class="h">ضعيف غالباً</span> — أفكار قليلة عالية المخاطر</td>
+        </tr>
+        <tr>
+          <td class="td-label">مثال عملي</td>
+          <td class="td-p">300 د.ك شهرياً في SPUS أو صناديق عالمية</td>
+          <td class="td-a">يدرس Apple أو Nvidia أو بنوك قبل الشراء</td>
+          <td class="td-s">يشتري اكتتاباً جديداً أو عملة رقمية أملاً في ارتفاع كبير</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">3 / 10</span>
+  </div>
+</div>
+</div></div>
+<!-- ══════════════════════════════════════════
+     SLIDE 4 — السلوك في السوق
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">السلوك في السوق</span>
+  </div>
+  <div style="height:24px;"></div>
+  <div class="div"></div>
+  <div class="content" style="padding-top:28px; padding-bottom:28px; justify-content:flex-start;">
+    <div class="stitle">كيف يتصرف كل مستثمر <span class="h">في السوق؟</span></div>
+    <div class="sdesc">ردود الفعل في مختلف أحوال السوق</div>
+    <table class="ct" style="margin-top:20px;">
+      <thead><tr>
+        <th class="th-label">الحالة</th>
+        <th class="th-p">🌱 السلبي</th>
+        <th class="th-a">🔍 النشط</th>
+        <th class="th-s">⚡ المضارب</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-label">السلوك العام</td>
+          <td class="td-p"><span class="h">هادئ وثابت وصبور</span> — يستمر خلال الأسواق الجيدة والسيئة</td>
+          <td class="td-a">تحليلي وفضولي — صبور لكن أكثر انخراطاً في المتابعة</td>
+          <td class="td-s"><span class="h">عاطفي وسريع الحركة</span> — يحتاج قواعد صارمة لتجنب المقامرة</td>
+        </tr>
+        <tr>
+          <td class="td-label">عند الهبوط</td>
+          <td class="td-p">يستمر في DCA، يتجنب البيع بالذعر، يتذكر خطته الطويلة</td>
+          <td class="td-a">يراجع الفرضية، يشتري شركات جيدة بأسعار أفضل</td>
+          <td class="td-s"><span class="h">يحمي رأس المال</span>، يتجنب الانتقام، يتقبل الخسارة بسرعة</td>
+        </tr>
+        <tr>
+          <td class="td-label">في الصعود</td>
+          <td class="td-p">يستمر لكن يتجنب مطاردة الضجيج والتفاؤل المبالغ</td>
+          <td class="td-a">يراجع التقييمات بعناية ويتجنب الأسعار المبالغ فيها</td>
+          <td class="td-s"><span class="h">الأخطر عليه</span> — الثقة الزائدة والطمع يزدادان مع الصعود</td>
+        </tr>
+        <tr>
+          <td class="td-label">السوق العرضي</td>
+          <td class="td-p">يواصل التراكم وينتظر بصبر</td>
+          <td class="td-a">يبحث عن فرص مقومة بأقل أو قطاعات تتحسن أساسياتها</td>
+          <td class="td-s">قد <span class="h">يفرط في التداول</span> بسبب بطء الحركة</td>
+        </tr>
+        <tr>
+          <td class="td-label">معدل المتابعة</td>
+          <td class="td-p">شهرياً أو ربع سنوياً — <span class="h">المتابعة اليومية تُفسد القرارات</span></td>
+          <td class="td-a">أسبوعياً + فترات إعلان الأرباح</td>
+          <td class="td-s"><span class="h">يومياً أو خلال اليوم</span> — يسبب ضغطاً وقرارات عاطفية</td>
+        </tr>
+        <tr>
+          <td class="td-label">متى يشتري؟</td>
+          <td class="td-p">جدول منتظم شهرياً — <span class="h">التوقيت ليس المحور</span></td>
+          <td class="td-a">حين يكون التقييم والفرضية جذابَين</td>
+          <td class="td-s">فقط حين يكون العائد/المخاطرة واضحاً مع تقبّل الخسارة</td>
+        </tr>
+        <tr>
+          <td class="td-label">متى يبيع؟</td>
+          <td class="td-p">نادراً — <span class="h">عند تغيّر الأهداف</span> أو توزيع الأصول</td>
+          <td class="td-a">حين تنهار الفرضية أو يُبالَغ في التقييم</td>
+          <td class="td-s">عند تحقق الهدف أو وصول <span class="h">حد وقف الخسارة</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">4 / 10</span>
+  </div>
+</div>
+</div></div>
+<!-- ══════════════════════════════════════════
+     SLIDE 5 — المخاطر والأخطاء
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">المخاطر والأخطاء</span>
+  </div>
+  <div style="height:24px;"></div>
+  <div class="div"></div>
+  <div class="content" style="padding-top:28px; padding-bottom:28px; justify-content:flex-start;">
+    <div class="stitle">المخاطر <span class="h">&</span> الأخطاء الشائعة</div>
+    <div class="sdesc">ما الذي قد يُفسد كل نوع من المستثمرين؟</div>
+    <table class="ct" style="margin-top:20px;">
+      <thead><tr>
+        <th class="th-label">البند</th>
+        <th class="th-p">🌱 السلبي</th>
+        <th class="th-a">🔍 النشط</th>
+        <th class="th-s">⚡ المضارب</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-label">الخطر الرئيسي</td>
+          <td class="td-p"><span class="h">خطر السوق</span> — هبوط السوق كاملاً</td>
+          <td class="td-a">خطر السهم الفردي، القطاع، <span class="h">والثقة الزائدة</span></td>
+          <td class="td-s"><span class="h">خسارة دائمة</span>، ضجيج، ضعف سيولة، احتيال، تداول عاطفي</td>
+        </tr>
+        <tr>
+          <td class="td-label">الخطر النفسي</td>
+          <td class="td-p"><span class="h">البيع بالذعر</span> أو إيقاف المساهمات الدورية</td>
+          <td class="td-a">الأنا، الثقة الزائدة، <span class="h">رفض الاعتراف بالأخطاء</span></td>
+          <td class="td-s">FOMO، طمع، تداول انتقامي، <span class="h">إدمان المكاسب السريعة</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">الأخطاء الشائعة</td>
+          <td class="td-p">البيع في الهبوط، تغيير الصناديق، مطاردة القطاعات، <span class="h">إيقاف DCA</span></td>
+          <td class="td-a">شراء بلا فرضية، إفراط في التداول، التمسك بالخاسرين، <span class="h">اعتبار الحظ مهارة</span></td>
+          <td class="td-s">استثمار مبالغ كبيرة، اتباع مؤثرين، شراء متأخر، <span class="h">استخدام أموال الطوارئ</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">كيف يخسر؟</td>
+          <td class="td-p">البيع في الوقت الخاطئ، إيقاف المساهمات، <span class="h">ارتفاع الرسوم</span></td>
+          <td class="td-a">تحليل خاطئ، شراء مبالغ في سعره، <span class="h">تداول عاطفي</span></td>
+          <td class="td-s">انهيار الضجيج، رافعة مالية، <span class="h">رفض الخروج</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">مستوى الضغط</td>
+          <td class="td-p"><span class="h">منخفض</span> إذا كان واثقاً من خطته</td>
+          <td class="td-a">متوسط إلى مرتفع بسبب استمرار البحث والقرارات</td>
+          <td class="td-s"><span class="h">مرتفع جداً</span> — تقلبات شديدة وضغط مستمر</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="wbox">
+      <span class="wbox-lbl">⚠️ تنبيه</span>
+      المضاربة ليست استثماراً — هي رهان محسوب. الخطر الحقيقي حين يعتقد المضارب أنه مستثمر ويضع مبالغ جادة.
+    </div>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">5 / 10</span>
+  </div>
+</div>
+</div></div>
+<!-- ══════════════════════════════════════════
+     SLIDE 6 — المهارات والشخصية
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">المهارات والشخصية</span>
+  </div>
+  <div style="height:24px;"></div>
+  <div class="div"></div>
+  <div class="content" style="padding-top:28px; padding-bottom:28px; justify-content:flex-start;">
+    <div class="stitle">المهارات <span class="h">&</span> الشخصية المناسبة</div>
+    <div class="sdesc">ما الذي يحتاجه كل نوع؟ وهل أنت ملائم له؟</div>
+    <table class="ct" style="margin-top:20px;">
+      <thead><tr>
+        <th class="th-label">البند</th>
+        <th class="th-p">🌱 السلبي</th>
+        <th class="th-a">🔍 النشط</th>
+        <th class="th-s">⚡ المضارب</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-label">مستوى البحث</td>
+          <td class="td-p"><span class="h">منخفض إلى متوسط</span> — فهم الصناديق والمخاطر وتوزيع الأصول</td>
+          <td class="td-a"><span class="h">مرتفع</span> — قوائم مالية، تقييم، تحليل أعمال</td>
+          <td class="td-s"><span class="h">مرتفع جداً</span> إن كان جاداً — بحث محدود يجعله خطيراً</td>
+        </tr>
+        <tr>
+          <td class="td-label">المهارات</td>
+          <td class="td-p"><span class="h">الانضباط</span> أكثر من الذكاء — الاستمرارية هي التحدي الحقيقي</td>
+          <td class="td-a">البحث، التقييم، فهم الأعمال، <span class="h">التحكم العاطفي</span></td>
+          <td class="td-s">إدارة المخاطر، التحكم العاطفي، <span class="h">الاعتراف بالخطأ سريعاً</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">أفضل شخصية</td>
+          <td class="td-p">صبورة، ثابتة، هادئة، <span class="h">تفكر طويل الأمد</span></td>
+          <td class="td-a">فضولية، تحليلية، مستقلة، <span class="h">منضبطة</span></td>
+          <td class="td-s">تتحمل المخاطر، تتحكم بعواطفها، <span class="h">تتخذ قرارات سريعة</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">أسوأ شخصية</td>
+          <td class="td-p"><span class="h">غير صبور</span> أو مدمن على متابعة الأسعار</td>
+          <td class="td-a">عاطفي، كسول في البحث، <span class="h">يتأثر بآراء الآخرين</span></td>
+          <td class="td-s"><span class="h">طماع أو متهور</span> أو يخاف من تقبّل الخسارة</td>
+        </tr>
+        <tr>
+          <td class="td-label">الأنسب له</td>
+          <td class="td-p">المبتدئون، المشغولون، <span class="h">مستثمرو التقاعد</span></td>
+          <td class="td-a">من يستمتع بالبحث ويستطيع قراءة التقارير المالية</td>
+          <td class="td-s">ذوو الخبرة — <span class="h">يدركون احتمال خسارة المبلغ كاملاً</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">غير مناسب لـ</td>
+          <td class="td-p">من يبحث عن إثارة أو مكاسب سريعة</td>
+          <td class="td-a">من لا يملك وقتاً أو يتخذ قرارات عاطفية</td>
+          <td class="td-s">من يبني <span class="h">تقاعداً أو صندوق طوارئ</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">6 / 10</span>
+  </div>
+</div>
+</div></div>
+<!-- ══════════════════════════════════════════
+     SLIDE 7 — نقاط القوة والضعف والمحرك
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">القوة والضعف</span>
+  </div>
+  <div style="height:24px;"></div>
+  <div class="div"></div>
+  <div class="content" style="padding-top:28px; padding-bottom:28px; justify-content:flex-start;">
+    <div class="stitle">نقاط القوة <span class="h">&</span> الضعف</div>
+    <div class="sdesc">ما الذي يميز كل مستثمر؟ وما هو عقب أخيله؟</div>
+    <table class="ct" style="margin-top:20px;">
+      <thead><tr>
+        <th class="th-label">البند</th>
+        <th class="th-p">🌱 السلبي</th>
+        <th class="th-a">🔍 النشط</th>
+        <th class="th-s">⚡ المضارب</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-label">أكبر قوة</td>
+          <td class="td-p"><span class="h">بسيط ومتنوع</span> — مناسب للعائد المركب طويل الأمد</td>
+          <td class="td-a">يمكن أن يتفوق إذا امتلك <span class="h">المهارة والميزة الحقيقية</span></td>
+          <td class="td-s">قد يحقق <span class="h">عوائد ضخمة</span> إذا كان مبكراً وصائباً ومنضبطاً</td>
+        </tr>
+        <tr>
+          <td class="td-label">أكبر ضعف</td>
+          <td class="td-p">لا يتفوق على السوق بطبيعته — <span class="h">يتأثر بهبوط السوق العام</span></td>
+          <td class="td-a">التفوق المستمر صعب — <span class="h">يتطلب وقتاً وانضباطاً نفسياً</span></td>
+          <td class="td-s"><span class="h">الخسائر الكبيرة محتملة</span> — يتحول بسهولة إلى مقامرة</td>
+        </tr>
+        <tr>
+          <td class="td-label">محرك الأداء</td>
+          <td class="td-p"><span class="h">معدل الادخار + الزمن</span> في السوق + التنويع</td>
+          <td class="td-a">جودة البحث، الانضباط، <span class="h">اختيار الأسهم والتقييم</span></td>
+          <td class="td-s"><span class="h">التوقيت + المحفز + الحظ</span> + إدارة المخاطر</td>
+        </tr>
+        <tr>
+          <td class="td-label">كيف ينجح؟</td>
+          <td class="td-p">يبقى مستثمراً ويترك <span class="h">العائد المركب يعمل</span> لصالحه</td>
+          <td class="td-a">يحدد فرصاً جيدة قبل أن يعكسها السوق في السعر</td>
+          <td class="td-s">يخاطر بمبالغ صغيرة في فرص <span class="h">ذات عائد غير متماثل</span> ويخرج بانضباط</td>
+        </tr>
+        <tr>
+          <td class="td-label">السؤال الرئيسي</td>
+          <td class="td-p">«هل يتوافق هذا مع <span class="h">خطتي طويلة الأجل؟</span>»</td>
+          <td class="td-a">«هل أفهمه <span class="h">أفضل من المستثمر العادي؟</span>»</td>
+          <td class="td-s">«هل أستطيع تحمّل <span class="h">خسارة هذا المال؟</span>»</td>
+        </tr>
+        <tr>
+          <td class="td-label">تعريف النجاح</td>
+          <td class="td-p">البقاء مستثمراً وتنمية الثروة والوصول إلى الحرية المالية</td>
+          <td class="td-a">التفوق على مؤشر مرجعي بعد الرسوم عبر عدة سنوات</td>
+          <td class="td-s">مكاسب كبيرة مع <span class="h">إبقاء الخسائر تحت السيطرة</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">7 / 10</span>
+  </div>
+</div>
+</div></div>
+<!-- ══════════════════════════════════════════
+     SLIDE 8 — العادات وإدارة المخاطر
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">العادات وإدارة المخاطر</span>
+  </div>
+  <div style="height:24px;"></div>
+  <div class="div"></div>
+  <div class="content" style="padding-top:28px; padding-bottom:28px; justify-content:flex-start;">
+    <div class="stitle">العادات <span class="h">&</span> إدارة المخاطر</div>
+    <div class="sdesc">السلوكيات التي تصنع الفرق</div>
+    <table class="ct" style="margin-top:20px;">
+      <thead><tr>
+        <th class="th-label">البند</th>
+        <th class="th-p">🌱 السلبي</th>
+        <th class="th-a">🔍 النشط</th>
+        <th class="th-s">⚡ المضارب</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-label">العادات الجيدة</td>
+          <td class="td-p"><span class="h">أتمتة الاستثمار</span>، إعادة توازن سنوياً، خفض الرسوم، التركيز على معدل الادخار</td>
+          <td class="td-a">كتابة فرضية، قواعد شراء وبيع، <span class="h">تتبع الأخطاء</span>، مقارنة بمؤشر</td>
+          <td class="td-s">حجم مركز صغير، <span class="h">حد أقصى للخسارة</span>، جني أرباح، لا أموال طوارئ</td>
+        </tr>
+        <tr>
+          <td class="td-label">العادات السيئة</td>
+          <td class="td-p">متابعة يومية، تغيير الاستراتيجية بعد كل حركة، <span class="h">الاعتقاد أنه بلا مخاطر</span></td>
+          <td class="td-a">الاعتقاد أن كل شركة جيدة = سهم جيد، <span class="h">تقليد مستثمرين مشهورين</span> بلا فهم</td>
+          <td class="td-s">التعامل مع المضاربة كاستثمار، مطاردة ارتفاعات، <span class="h">تجاهل الأساسيات</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">إدارة المخاطر</td>
+          <td class="td-p">تنويع، توزيع أصول، <span class="h">صندوق طوارئ</span>، أفق طويل، إعادة توازن</td>
+          <td class="td-a">تحديد حجم مراكز، مراجعة الفرضية، الخروج عند انهيارها، <span class="h">انضباط في التقييم</span></td>
+          <td class="td-s">نسبة صغيرة جداً، حد صارم للخسارة، <span class="h">لا رافعة مالية ولا أموال مقترضة</span></td>
+        </tr>
+        <tr>
+          <td class="td-label">الأفق الزمني</td>
+          <td class="td-p"><span class="h">10–30 سنة</span> أو أكثر</td>
+          <td class="td-a">أشهر إلى عدة سنوات</td>
+          <td class="td-s"><span class="h">أيام إلى أشهر</span> — مخاطر تبقى عالية حتى لو طال</td>
+        </tr>
+        <tr>
+          <td class="td-label">صندوق الطوارئ</td>
+          <td class="td-p">يبدأ الاستثمار <span class="h">بعد وجوده</span></td>
+          <td class="td-a">لا يستبدله بانتقاء أسهم</td>
+          <td class="td-s"><span class="h">لا يجوز استخدامه</span> في المضاربة — إطلاقاً</td>
+        </tr>
+        <tr>
+          <td class="td-label">ما يراقبه</td>
+          <td class="td-p">مبلغ المساهمة، رسوم الصناديق، <span class="h">العائد طويل الأمد</span></td>
+          <td class="td-a">الإيرادات، الهوامش، التقييم، <span class="h">جودة الإدارة</span></td>
+          <td class="td-s">حركة السعر، حجم التداول، <span class="h">مستويات وقف الخسارة</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">8 / 10</span>
+  </div>
+</div>
+</div></div>
+<!-- ══════════════════════════════════════════
+     SLIDE 9 — التوزيع المقترح + الاستثمار الإسلامي
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">التوزيع ودور المحفظة</span>
+  </div>
+  <div style="height:24px;"></div>
+  <div class="div"></div>
+  <div class="content" style="padding-top:28px; padding-bottom:20px; justify-content:flex-start;">
+    <div class="stitle">التوزيع المقترح <span class="h">&</span> دور كل نوع</div>
+    <div class="sdesc">كيف تُبني محفظتك الاستثمارية؟</div>
+    <div class="alloc-row">
+      <div class="ac ap">
+        <span class="ac-pct">80–90%</span>
+        <span class="ac-name">🌱 الأساس السلبي</span>
+        <span class="ac-desc">المحرك الرئيسي لبناء الثروة — لا غنى عنه لأي مستثمر</span>
+      </div>
+      <div class="ac aa">
+        <span class="ac-pct">10–20%</span>
+        <span class="ac-name">🔍 أفكار نشطة</span>
+        <span class="ac-desc">إضافة قائمة على البحث — لمن يملك الوقت والمهارة</span>
+      </div>
+      <div class="ac as_">
+        <span class="ac-pct">0–5%</span>
+        <span class="ac-name">⚡ مضاربة</span>
+        <span class="ac-desc">صندوق صغير فقط — بأموال يمكن تحمّل خسارتها كاملاً</span>
+      </div>
+    </div>
+    <div style="height:10px"></div>
+    <div class="div"></div>
+    <div style="height:10px"></div>
+    <table class="ct">
+      <thead><tr>
+        <th class="th-label">البند</th>
+        <th class="th-p">🌱 السلبي</th>
+        <th class="th-a">🔍 النشط</th>
+        <th class="th-s">⚡ المضارب</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-label">النسبة المقترحة</td>
+          <td class="td-p"><span class="h">70% – 100%</span> بحسب المعرفة والأهداف</td>
+          <td class="td-a"><span class="h">0% – 30%</span> بحسب المهارة والوقت والقناعة</td>
+          <td class="td-s"><span class="h">0% – 5%</span> فقط — بأموال تتحمل خسارتها</td>
+        </tr>
+        <tr>
+          <td class="td-label">دور المحفظة</td>
+          <td class="td-p"><span class="h">القلب الرئيسي</span> للمحفظة</td>
+          <td class="td-a">جزء إضافي لمحاولة تحسين العائد</td>
+          <td class="td-s"><span class="h">صندوق صغير</span> للتجربة فقط — إن وُجد أصلاً</td>
+        </tr>
+        <tr>
+          <td class="td-label">مثال القرار</td>
+          <td class="td-p">«سأستثمر 300 د.ك شهرياً في صناديق متنوعة لمدة 20 سنة»</td>
+          <td class="td-a">«هذه الشركة مقومة بأقل لأن أرباحها وهوامشها تتحسن»</td>
+          <td class="td-s">«قد يتضاعف هذا الاكتتاب — لكنني قد أخسر معظم المال»</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="isbox">
+      <span class="isbox-lbl">☪️ ملاحظة الاستثمار الإسلامي</span>
+      <strong>السلبي:</strong> استخدم صناديق شرعية (كـ SPUS) كأساس. &nbsp;
+      <strong>النشط:</strong> افحص كل شركة من حيث النشاط والديون والتطهير. &nbsp;
+      <strong>المضارب:</strong> حذر إضافي — كثير من الأصول المضاربية قد تفشل شرعياً أو من حيث الشفافية.
+    </div>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">9 / 10</span>
+  </div>
+</div>
+</div></div>
+<!-- ══════════════════════════════════════════
+     SLIDE 10 — الخلاصة النهائية
+══════════════════════════════════════════ -->
+<div class="slide-scaler"><div class="slide-inner"><div class="slide">
+  <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-dot-grid"></div>
+  <div class="topbar">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="topbar-label">الخلاصة النهائية</span>
+  </div>
+  <div style="height:24px;"></div>
+  <div class="div"></div>
+  <div class="content" style="padding-top:28px; padding-bottom:20px; justify-content:flex-start;">
+    <div class="stitle">القواعد الذهبية <span class="h">&</span> الخلاصة</div>
+    <div class="sdesc">جملة واحدة تلخص كل نوع</div>
+    <div class="rule-cards" style="margin-top:22px;">
+      <div class="rc">
+        <div class="rc-icon rp">🌱</div>
+        <div class="rc-body rp">
+          <strong>المستثمر السلبي</strong>
+          <p>«<span class="h">استثمر بانتظام، ونوّع، ولا تقاطع مسار العائد المركب</span>» — ينجح بالاستمرارية والانضباط. الواقع يثبت صعوبة تفوق معظم المديرين النشطين على المؤشرات بمرور الوقت.</p>
+        </div>
+      </div>
+      <div class="rc">
+        <div class="rc-icon ra">🔍</div>
+        <div class="rc-body ra">
+          <strong>المستثمر النشط</strong>
+          <p>«<span class="h">لا استثمار من دون فرضية واضحة</span>» — ينجح حين يكون صائباً أكثر مما يتوقع السوق. التفوق المستمر يتطلب مهارة وانضباطاً وميزة حقيقية.</p>
+        </div>
+      </div>
+      <div class="rc">
+        <div class="rc-icon rs">⚡</div>
+        <div class="rc-body rs">
+          <strong>المستثمر المضارب</strong>
+          <p>«<span class="h">حجم صغير، خروج صارم، تقبّل كامل لاحتمال الخسارة</span>» — ينجو حين يُبقي خسائره صغيرة ومحدودة. المضاربة تحمل مخاطر سلوكية كبيرة حين يقودها الضجيج أو الطمع.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ibox" style="margin-top:22px;">
+      <span class="ibox-lbl">🎯 الرسالة الأخيرة</span>
+      معظم الناس يحتاجون <strong>مستثمراً سلبياً في الأصل</strong> — مع إمكانية إضافة جزء نشط إن أردت — والمضاربة إن كان لا بد، فحجم ضئيل بأموال تتحمل خسارتها.
+    </div>
+    <div style="text-align:center; margin-top:22px;">
+      <div class="logo" style="font-size:26px; display:inline-block;"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+      <div style="font-family:'Montserrat',sans-serif; font-size:13px; color:var(--muted); margin-top:6px; direction:ltr;">@the.budgetr</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="logo"><span class="the">the</span><span class="dot">.</span><span class="bud">budgetr</span></div>
+    <span class="footer-pg">10 / 10</span>
+  </div>
+</div>
+</div></div></div>
+
+<script>
+// Wrap closing: each .slide needs two extra closing divs
+// Already handled via JS below
+
+function applyScale() {
+  const vw = window.innerWidth;
+  const scale = Math.min(1, vw / 1080);
+  const scaledH = Math.round(1350 * scale);
+
+  document.querySelectorAll('.slide-inner').forEach(inner => {
+    inner.style.transform = 'scale(' + scale + ')';
+    inner.style.transformOrigin = 'top center';
+    inner.style.marginBottom = '-' + Math.round(1350 * (1 - scale)) + 'px';
+  });
+
+  document.querySelectorAll('.slide-scaler').forEach(sc => {
+    sc.style.height = scaledH + 'px';
+    sc.style.marginBottom = '20px';
+  });
+}
+
+window.addEventListener('load', applyScale);
+window.addEventListener('resize', applyScale);
+
+const allSlides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+const counter = document.getElementById('nav-counter');
+let current = 0;
+
+function updateNav(idx) {
+  dots.forEach((d,i) => d.classList.toggle('active', i===idx));
+  counter.textContent = (idx+1) + ' / ' + allSlides.length;
+  current = idx;
+}
+
+function goToSlide(idx) {
+  document.querySelectorAll('.slide-scaler')[idx].scrollIntoView({ behavior:'smooth', block:'start' });
+  updateNav(idx);
+}
+function nextSlide() { if(current < allSlides.length-1) goToSlide(current+1); }
+function prevSlide() { if(current > 0) goToSlide(current-1); }
+
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowDown'||e.key==='ArrowRight') nextSlide();
+  if(e.key==='ArrowUp'||e.key==='ArrowLeft') prevSlide();
+});
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      const scalers = Array.from(document.querySelectorAll('.slide-scaler'));
+      updateNav(scalers.indexOf(entry.target));
+    }
+  });
+}, { threshold: 0.4 });
+document.querySelectorAll('.slide-scaler').forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
