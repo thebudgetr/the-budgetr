@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة تمويل السيارة | the.budgetr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #d1fae5;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --teal: #0D5C63;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+            --shadow: rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+            padding-bottom: 3rem;
+        }
+
+        body[dir="ltr"] { font-family: 'Inter', -apple-system, sans-serif; }
+
+        .container { max-width: 780px; margin: 0 auto; padding: 1rem; }
+
+        /* ─── Header ─── */
+        .header {
+            background: var(--teal);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            top: -120px; right: -80px;
+            border: 40px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #FFF8F0;
+            margin-bottom: 0.25rem;
+            direction: ltr;
+        }
+
+        .logo span { color: #F4845F; }
+
+        .header-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #FFF8F0;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-sub {
+            color: rgba(255,248,240,0.75);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Rule Badge */
+        .rule-badge {
+            display: inline-flex;
+            gap: 0.5rem;
+            background: rgba(255,248,240,0.15);
+            border: 2px solid rgba(255,248,240,0.3);
+            border-radius: 50px;
+            padding: 0.6rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .rule-num {
+            background: #F4845F;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.2rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-control {
+            background: rgba(255,248,240,0.15);
+            border: 2px solid rgba(255,248,240,0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            color: #FFF8F0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-control:hover {
+            background: rgba(255,248,240,0.25);
+        }
+
+        select.btn-control option { color: var(--text-primary); background: white; }
+
+        /* ─── Card ─── */
+        .card {
+            background: var(--card-bg);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ─── Form ─── */
+        .form-group { margin-bottom: 1.25rem; }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        /* ─── Rule Explainer ─── */
+        .rule-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .rule-item {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .rule-item-num {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--teal);
+            line-height: 1.2;
+        }
+
+        .rule-item-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* ─── Button ─── */
+        .btn {
+            width: 100%;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+        }
+
+        /* ─── Results ─── */
+        .results { display: none; }
+        .results.active { display: block; animation: fadeIn 0.5s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Main result banner */
+        .result-banner {
+            background: linear-gradient(135deg, var(--teal), #10b981);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-banner-label {
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-banner-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+        }
+
+        .result-banner-sub {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Steps grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-card {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .step-card.green {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .step-card.orange {
+            background: #fef3c7;
+            border-color: var(--warning);
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .step-sub {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* How it was calculated */
+        .calc-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .calc-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .calc-step-num {
+            background: var(--teal);
+            color: white;
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .calc-step-content { flex: 1; }
+
+        .calc-step-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .calc-step-formula {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0.15rem 0;
+        }
+
+        .calc-step-result {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Warning note */
+        .warning-note {
+            background: #fef3c7;
+            border: 2px solid var(--warning);
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-size: 0.9rem;
+            color: #92400e;
+            line-height: 1.7;
+        }
+
+        .warning-note strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .rule-grid { grid-template-columns: repeat(3, 1fr); }
+            .steps-grid { grid-template-columns: 1fr 1fr; }
+            .result-banner-value { font-size: 2.2rem; }
+            .card { padding: 1.25rem 1rem; }
+        }
+    </style>
+</head>
+<body dir="rtl">
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo"><span>the.</span>budgetr</div>
+        <div class="header-title" data-ar="حاسبة تمويل السيارة 🚗" data-en="Car Finance Calculator 🚗">حاسبة تمويل السيارة 🚗</div>
+        <div class="header-sub" data-ar="اعرف أعلى سعر سيارة مناسب لراتبك" data-en="Find the right car price for your salary">اعرف أعلى سعر سيارة مناسب لراتبك</div>
+
+        <div class="rule-badge">
+            <span class="rule-num">20%</span>
+            <span class="rule-num">4</span>
+            <span class="rule-num">15%</span>
+        </div>
+
+        <div class="controls">
+            <button class="btn-control" onclick="toggleLanguage()"><span id="langBtn">English</span></button>
+            <select class="btn-control" id="currencySelect" onchange="updateCurrency()">
+                <option value="KWD">🇰🇼 د.ك - دينار كويتي</option>
+                <option value="SAR">🇸🇦 ر.س - ريال سعودي</option>
+                <option value="AED">🇦🇪 د.إ - درهم إماراتي</option>
+                <option value="QAR">🇶🇦 ر.ق - ريال قطري</option>
+                <option value="BHD">🇧🇭 د.ب - دينار بحريني</option>
+                <option value="OMR">🇴🇲 ر.ع - ريال عماني</option>
+                <option value="USD">🇺🇸 $ - دولار أمريكي</option>
+                <option value="EUR">🇪🇺 € - يورو</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Rule Explainer -->
+    <div class="card">
+        <h2 class="card-title">
+            <span>📐</span>
+            <span data-ar="قاعدة 20 / 4 / 15" data-en="The 20 / 4 / 15 Rule">قاعدة 20 / 4 / 15</span>
+        </h2>
+
+        <div class="rule-grid">
+            <div class="rule-item">
+                <div class="rule-item-num">20%</div>
+                <div class="rule-item-label" data-ar="مقدم من قيمة السيارة" data-en="Down payment of car value">مقدم من قيمة السيارة</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-item-num">4</div>
+                <div class="rule-item-label" data-ar="سنوات مدة التمويل" data-en="Years of financing">سنوات مدة التمويل</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-item-num">15%</div>
+                <div class="rule-item-label" data-ar="حد القسط من الراتب" data-en="Max installment of salary">حد القسط من الراتب</div>
+            </div>
+        </div>
+
+        <!-- Salary Input -->
+        <div class="form-group">
+            <label class="form-label" data-ar="أدخل راتبك الشهري الصافي" data-en="Enter your monthly net salary">أدخل راتبك الشهري الصافي</label>
+            <input type="number" class="form-input" id="salaryInput" placeholder="1,500" oninput="calculate()">
+        </div>
+
+        <button class="btn btn-primary" onclick="calculate()">
+            <span data-ar="احسب السيارة المناسبة لي 🚗" data-en="Calculate My Suitable Car 🚗">احسب السيارة المناسبة لي 🚗</span>
+        </button>
+    </div>
+
+    <!-- Results -->
+    <div class="results" id="results">
+
+        <!-- Main Banner -->
+        <div class="result-banner">
+            <div class="result-banner-label" data-ar="🎯 أعلى سعر سيارة مناسب لك" data-en="🎯 Maximum Suitable Car Price">🎯 أعلى سعر سيارة مناسب لك</div>
+            <div class="result-banner-value" id="maxCarPrice">0</div>
+            <div class="result-banner-sub" data-ar="بناءً على قاعدة 20 / 4 / 15" data-en="Based on the 20 / 4 / 15 rule">بناءً على قاعدة 20 / 4 / 15</div>
+        </div>
+
+        <!-- Key Numbers -->
+        <div class="card">
+            <h2 class="card-title">
+                <span>💡</span>
+                <span data-ar="الأرقام المهمة" data-en="Key Numbers">الأرقام المهمة</span>
+            </h2>
+
+            <div class="steps-grid">
+                <div class="step-card orange">
+                    <div class="step-label" data-ar="المقدم المطلوب" data-en="Required Down Payment">المقدم المطلوب</div>
+                    <div class="step-value" id="downPayment">0</div>
+                    <div class="step-sub">20%</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-label" data-ar="أقصى مبلغ تمويل" data-en="Max Finance Amount">أقصى مبلغ تمويل</div>
+                    <div class="step-value" id="financeAmount">0</div>
+                    <div class="step-sub">80%</div>
+                </div>
+                <div class="step-card green">
+                    <div class="step-label" data-ar="أعلى قسط مناسب" data-en="Max Monthly Installment">أعلى قسط مناسب</div>
+                    <div class="step-value" id="maxInstallment">0</div>
+                    <div class="step-sub" data-ar="شهرياً" data-en="per month">شهرياً</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-label" data-ar="مدة التمويل" data-en="Finance Period">مدة التمويل</div>
+                    <div class="step-value" data-ar="48 شهر" data-en="48 months">48 شهر</div>
+                    <div class="step-sub" data-ar="4 سنوات" data-en="4 years">4 سنوات</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How it was calculated -->
+        <div class="card">
+            <h2 class="card-title">
+                <span>🧮</span>
+                <span data-ar="كيف حسبناها؟" data-en="How Was It Calculated?">كيف حسبناها؟</span>
+            </h2>
+
+            <div class="calc-steps">
+                <div class="calc-step">
+                    <div class="calc-step-num">1</div>
+                    <div class="calc-step-content">
+                        <div class="calc-step-label" data-ar="أعلى قسط مناسب" data-en="Max Monthly Installment">أعلى قسط مناسب</div>
+                        <div class="calc-step-formula" id="formula1"></div>
+                        <div class="calc-step-result" id="result1"></div>
+                    </div>
+                </div>
+                <div class="calc-step">
+                    <div class="calc-step-num">2</div>
+                    <div class="calc-step-content">
+                        <div class="calc-step-label" data-ar="أقصى مبلغ تمويل" data-en="Max Finance Amount">أقصى مبلغ تمويل</div>
+                        <div class="calc-step-formula" id="formula2"></div>
+                        <div class="calc-step-result" id="result2"></div>
+                    </div>
+                </div>
+                <div class="calc-step">
+                    <div class="calc-step-num">3</div>
+                    <div class="calc-step-content">
+                        <div class="calc-step-label" data-ar="المقدم المطلوب" data-en="Required Down Payment">المقدم المطلوب</div>
+                        <div class="calc-step-formula" id="formula3"></div>
+                        <div class="calc-step-result" id="result3"></div>
+                    </div>
+                </div>
+                <div class="calc-step">
+                    <div class="calc-step-num">4</div>
+                    <div class="calc-step-content">
+                        <div class="calc-step-label" data-ar="أعلى سعر سيارة مناسب" data-en="Max Suitable Car Price">أعلى سعر سيارة مناسب</div>
+                        <div class="calc-step-formula" id="formula4"></div>
+                        <div class="calc-step-result" id="result4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning Note -->
+        <div class="card">
+            <div class="warning-note">
+                <strong>⚠️ <span data-ar="ملاحظة مهمة" data-en="Important Note">ملاحظة مهمة</span></strong>
+                <span data-ar="هذه الحسبة تقريبية وتعتمد على قاعدة 20 / 4 / 15، ولا تشمل أرباح التمويل، التأمين، الصيانة، البنزين أو أي رسوم إضافية. تأكد دائماً من قدرتك الفعلية قبل الشراء." data-en="This calculation is approximate and based on the 20/4/15 rule. It does not include financing interest, insurance, maintenance, fuel, or any additional fees. Always verify your actual affordability before purchasing.">
+                    هذه الحسبة تقريبية وتعتمد على قاعدة 20 / 4 / 15، ولا تشمل أرباح التمويل، التأمين، الصيانة، البنزين أو أي رسوم إضافية. تأكد دائماً من قدرتك الفعلية قبل الشراء.
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <a href="https://instagram.com/the.budgetr" target="_blank">@the.budgetr</a>
+    </div>
+
+</div>
+
+<script>
+    let currentLang = 'ar';
+    let currentCurrency = 'KWD';
+
+    const currencySymbols = {
+        KWD: 'د.ك', SAR: 'ر.س', AED: 'د.إ',
+        QAR: 'ر.ق', BHD: 'د.ب', OMR: 'ر.ع',
+        USD: '$', EUR: '€'
+    };
+
+    const currencyEn = {
+        KWD: 'KWD', SAR: 'SAR', AED: 'AED',
+        QAR: 'QAR', BHD: 'BHD', OMR: 'OMR',
+        USD: 'USD', EUR: 'EUR'
+    };
+
+    function fmt(amount) {
+        const sym = currentLang === 'ar' ? currencySymbols[currentCurrency] : currencyEn[currentCurrency];
+        const num = Math.round(amount).toLocaleString('en-US');
+        return currentLang === 'ar' ? num + ' ' + sym : sym + ' ' + num;
+    }
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+        document.getElementById('langBtn').textContent = currentLang === 'ar' ? 'English' : 'العربية';
+        document.querySelectorAll('[data-ar]').forEach(el => {
+            el.textContent = el.getAttribute('data-' + currentLang);
+        });
+        if (document.getElementById('results').classList.contains('active')) calculate();
+    }
+
+    function updateCurrency() {
+        currentCurrency = document.getElementById('currencySelect').value;
+        if (document.getElementById('results').classList.contains('active')) calculate();
+    }
+
+    function calculate() {
+        const salary = parseFloat(document.getElementById('salaryInput').value) || 0;
+        if (salary <= 0) return;
+
+        // Step 1: Max installment = salary × 15%
+        const maxInstallment = salary * 0.15;
+
+        // Step 2: Max finance = max installment × 48 months
+        const financeAmount = maxInstallment * 48;
+
+        // Step 3: Down payment = finance amount ÷ 4
+        const downPayment = financeAmount / 4;
+
+        // Step 4: Max car price = finance + down payment
+        const maxCarPrice = financeAmount + downPayment;
+
+        // Update main banner
+        document.getElementById('maxCarPrice').textContent = fmt(maxCarPrice);
+
+        // Update key numbers
+        document.getElementById('maxInstallment').textContent = fmt(maxInstallment);
+        document.getElementById('financeAmount').textContent = fmt(financeAmount);
+        document.getElementById('downPayment').textContent = fmt(downPayment);
+
+        // Update calculation steps
+        if (currentLang === 'ar') {
+            document.getElementById('formula1').textContent = fmt(salary) + ' × 15%';
+            document.getElementById('result1').textContent = fmt(maxInstallment) + ' شهرياً';
+
+            document.getElementById('formula2').textContent = fmt(maxInstallment) + ' × 48 شهر';
+            document.getElementById('result2').textContent = fmt(financeAmount);
+
+            document.getElementById('formula3').textContent = fmt(financeAmount) + ' ÷ 4';
+            document.getElementById('result3').textContent = fmt(downPayment);
+
+            document.getElementById('formula4').textContent = fmt(financeAmount) + ' + ' + fmt(downPayment);
+            document.getElementById('result4').textContent = fmt(maxCarPrice);
+        } else {
+            document.getElementById('formula1').textContent = fmt(salary) + ' × 15%';
+            document.getElementById('result1').textContent = fmt(maxInstallment) + ' / month';
+
+            document.getElementById('formula2').textContent = fmt(maxInstallment) + ' × 48 months';
+            document.getElementById('result2').textContent = fmt(financeAmount);
+
+            document.getElementById('formula3').textContent = fmt(financeAmount) + ' ÷ 4';
+            document.getElementById('result3').textContent = fmt(downPayment);
+
+            document.getElementById('formula4').textContent = fmt(financeAmount) + ' + ' + fmt(downPayment);
+            document.getElementById('result4').textContent = fmt(maxCarPrice);
+        }
+
+        // Show results
+        const resultsEl = document.getElementById('results');
+        resultsEl.classList.add('active');
+        resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+</script>
+</body>
+</html>

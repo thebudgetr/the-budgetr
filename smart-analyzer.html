@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المحلل المالي الذكي | the.budgetr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #d1fae5;
+            --secondary: #6366f1;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+            --shadow: rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        body[dir="ltr"] {
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px var(--shadow);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-control {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-control:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon {
+            font-size: 1.6rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        /* Category Toggle */
+        .category-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-toggle {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-toggle.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-toggle.active.optional {
+            background: var(--warning);
+            border-color: var(--warning);
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Items List */
+        .items-list {
+            margin-top: 1.5rem;
+        }
+
+        .item {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            border: 2px solid var(--border);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        body[dir="ltr"] .item {
+            animation: slideInLTR 0.3s ease;
+        }
+
+        @keyframes slideInLTR {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-amount {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-necessary {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .badge-optional {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.3;
+        }
+
+        /* Analysis */
+        .analysis {
+            background: var(--card-bg);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg);
+            padding: 1.25rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-sublabel {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background: var(--bg);
+            border-radius: 12px;
+            border: 2px solid var(--border);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 16px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.5s ease;
+            border-radius: 8px;
+        }
+
+        .progress-fill.warning {
+            background: var(--warning);
+        }
+
+        .progress-fill.danger {
+            background: var(--danger);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            border-right: 4px solid;
+            animation: fadeIn 0.4s ease;
+        }
+
+        body[dir="ltr"] .alert {
+            border-right: none;
+            border-left: 4px solid;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: var(--primary-light);
+            border-color: var(--success);
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: var(--warning);
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            border-color: var(--danger);
+        }
+
+        .alert-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-body {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .alert-body ul {
+            margin-top: 0.75rem;
+            margin-right: 1.5rem;
+        }
+
+        body[dir="ltr"] .alert-body ul {
+            margin-right: 0;
+            margin-left: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .header, .card, .analysis {
+                padding: 1.5rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.6rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body dir="rtl">
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo" data-ar="the.budgetr" data-en="the.budgetr">the.budgetr</div>
+            <div class="tagline" data-ar="المحلل المالي الذكي" data-en="Smart Financial Analyzer">المحلل المالي الذكي</div>
+            
+            <div class="controls">
+                <button class="btn-control" onclick="toggleLanguage()">
+                    <span id="langBtn">English</span>
+                </button>
+                <select class="btn-control" id="currencySelect" onchange="updateCurrency()">
+                    <option value="KWD">د.ك - دينار كويتي</option>
+                    <option value="USD">$ - دولار أمريكي</option>
+                    <option value="SAR">ر.س - ريال سعودي</option>
+                    <option value="EUR">€ - يورو</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Salary Input -->
+        <div class="card">
+            <h2 class="card-title">
+                <span class="icon">💰</span>
+                <span data-ar="الراتب الشهري" data-en="Monthly Salary">الراتب الشهري</span>
+            </h2>
+            <div class="form-group">
+                <label class="form-label" data-ar="أدخل راتبك الشهري" data-en="Enter your monthly income">أدخل راتبك الشهري</label>
+                <input type="number" class="form-input" id="salaryInput" placeholder="0.00" oninput="calculate()">
+            </div>
+        </div>
+
+        <!-- Obligations -->
+        <div class="card">
+            <h2 class="card-title">
+                <span class="icon">📋</span>
+                <span data-ar="الالتزامات المالية" data-en="Financial Obligations">الالتزامات المالية</span>
+            </h2>
+            
+            <div class="form-group">
+                <label class="form-label" data-ar="اسم الالتزام" data-en="Item name">اسم الالتزام</label>
+                <input type="text" class="form-input" id="itemName" placeholder="مثال: إيجار، قسط سيارة، اشتراك">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" data-ar="المبلغ الشهري" data-en="Monthly amount">المبلغ الشهري</label>
+                <input type="number" class="form-input" id="itemAmount" placeholder="0.00">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" data-ar="التصنيف" data-en="Category">التصنيف</label>
+                <div class="category-toggle">
+                    <button class="btn-toggle active" id="btnNecessary" onclick="setCategory('necessary')">
+                        <span data-ar="ضروري" data-en="Necessary">ضروري</span>
+                    </button>
+                    <button class="btn-toggle optional" id="btnOptional" onclick="setCategory('optional')">
+                        <span data-ar="غير ضروري" data-en="Optional">غير ضروري</span>
+                    </button>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="addItem()">
+                <span data-ar="+ إضافة التزام" data-en="+ Add Obligation">+ إضافة التزام</span>
+            </button>
+
+            <div class="items-list" id="itemsList"></div>
+        </div>
+
+        <!-- Analysis -->
+        <div class="analysis">
+            <h2 class="card-title">
+                <span class="icon">📊</span>
+                <span data-ar="التحليل المالي" data-en="Financial Analysis">التحليل المالي</span>
+            </h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label" data-ar="إجمالي الالتزامات" data-en="Total Obligations">إجمالي الالتزامات</div>
+                    <div class="stat-value" id="totalObligations">0</div>
+                    <div class="stat-sublabel" id="obligationsPercent">0%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label" data-ar="الفائض" data-en="Surplus">الفائض</div>
+                    <div class="stat-value" id="surplus">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label" data-ar="الادخار المقترح" data-en="Suggested Savings">الادخار المقترح</div>
+                    <div class="stat-value" id="suggestedSavings">0</div>
+                    <div class="stat-sublabel">15-20%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label" data-ar="المبلغ الآمن للمصروف" data-en="Safe Spending">المبلغ الآمن للمصروف</div>
+                    <div class="stat-value" id="safeSpending">0</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span data-ar="نسبة الالتزامات من الراتب" data-en="Obligations vs Salary">نسبة الالتزامات من الراتب</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- Alerts -->
+            <div id="alertsContainer"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <a href="https://instagram.com/the.budgetr" target="_blank">@the.budgetr</a>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'ar';
+        let currentCurrency = 'KWD';
+        let items = [];
+        let currentCategory = 'necessary';
+
+        const currencySymbols = {
+            'KWD': 'د.ك',
+            'USD': '$',
+            'SAR': 'ر.س',
+            'EUR': '€'
+        };
+
+        // Load saved data
+        function loadData() {
+            const saved = localStorage.getItem('budgetrAnalyzer');
+            if (saved) {
+                const data = JSON.parse(saved);
+                items = data.items || [];
+                document.getElementById('salaryInput').value = data.salary || '';
+                currentCurrency = data.currency || 'KWD';
+                document.getElementById('currencySelect').value = currentCurrency;
+                renderItems();
+                calculate();
+            }
+        }
+
+        // Save data
+        function saveData() {
+            const data = {
+                salary: document.getElementById('salaryInput').value,
+                items: items,
+                currency: currentCurrency
+            };
+            localStorage.setItem('budgetrAnalyzer', JSON.stringify(data));
+        }
+
+        // Toggle language
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.getElementById('langBtn').textContent = currentLang === 'ar' ? 'English' : 'العربية';
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-ar]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+            
+            renderItems();
+            calculate();
+        }
+
+        // Update currency
+        function updateCurrency() {
+            currentCurrency = document.getElementById('currencySelect').value;
+            calculate();
+            saveData();
+        }
+
+        // Set category
+        function setCategory(category) {
+            currentCategory = category;
+            document.getElementById('btnNecessary').classList.toggle('active', category === 'necessary');
+            document.getElementById('btnOptional').classList.toggle('active', category === 'optional');
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            const symbol = currencySymbols[currentCurrency];
+            const formatted = amount.toFixed(0);
+            return currentLang === 'ar' ? `${formatted} ${symbol}` : `${symbol}${formatted}`;
+        }
+
+        // Add item
+        function addItem() {
+            const name = document.getElementById('itemName').value.trim();
+            const amount = parseFloat(document.getElementById('itemAmount').value);
+
+            if (!name || !amount || amount <= 0) {
+                alert(currentLang === 'ar' ? 'الرجاء إدخال اسم ومبلغ صحيح' : 'Please enter valid name and amount');
+                return;
+            }
+
+            items.push({ name, amount, category: currentCategory });
+            
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemAmount').value = '';
+            
+            renderItems();
+            calculate();
+            saveData();
+        }
+
+        // Remove item
+        function removeItem(index) {
+            items.splice(index, 1);
+            renderItems();
+            calculate();
+            saveData();
+        }
+
+        // Render items
+        function renderItems() {
+            const container = document.getElementById('itemsList');
+            
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <p>${currentLang === 'ar' ? 'لم تتم إضافة أي التزامات بعد' : 'No obligations added yet'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = items.map((item, index) => `
+                <div class="item">
+                    <div class="item-content">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-amount">${formatCurrency(item.amount)}</div>
+                    </div>
+                    <div class="item-actions">
+                        <span class="badge ${item.category === 'necessary' ? 'badge-necessary' : 'badge-optional'}">
+                            ${currentLang === 'ar' 
+                                ? (item.category === 'necessary' ? 'ضروري' : 'غير ضروري')
+                                : (item.category === 'necessary' ? 'Necessary' : 'Optional')
+                            }
+                        </span>
+                        <button class="btn-delete" onclick="removeItem(${index})">×</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Calculate
+        function calculate() {
+            const salary = parseFloat(document.getElementById('salaryInput').value) || 0;
+            const totalObligations = items.reduce((sum, item) => sum + item.amount, 0);
+            const surplus = salary - totalObligations;
+            const percentage = salary > 0 ? (totalObligations / salary * 100) : 0;
+            
+            // Suggested savings (17.5% = average of 15-20%)
+            const suggestedSavings = salary * 0.175;
+            const safeSpending = Math.max(0, surplus - suggestedSavings);
+
+            // Update stats
+            document.getElementById('totalObligations').textContent = formatCurrency(totalObligations);
+            document.getElementById('obligationsPercent').textContent = `${percentage.toFixed(1)}%`;
+            document.getElementById('surplus').textContent = formatCurrency(surplus);
+            document.getElementById('suggestedSavings').textContent = formatCurrency(suggestedSavings);
+            document.getElementById('safeSpending').textContent = formatCurrency(safeSpending);
+
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const cappedPercentage = Math.min(100, percentage);
+            
+            progressFill.style.width = `${cappedPercentage}%`;
+            progressPercent.textContent = `${percentage.toFixed(1)}%`;
+            
+            // Color coding
+            progressFill.className = 'progress-fill';
+            if (percentage > 70) {
+                progressFill.classList.add('danger');
+            } else if (percentage > 50) {
+                progressFill.classList.add('warning');
+            }
+
+            // Generate alerts
+            generateAlerts(salary, totalObligations, percentage, surplus, safeSpending);
+            
+            saveData();
+        }
+
+        // Generate alerts
+        function generateAlerts(salary, totalObligations, percentage, surplus, safeSpending) {
+            const container = document.getElementById('alertsContainer');
+            let alerts = '';
+
+            if (salary === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const optionalTotal = items
+                .filter(item => item.category === 'optional')
+                .reduce((sum, item) => sum + item.amount, 0);
+
+            // Critical: > 70%
+            if (percentage > 70) {
+                const needToCut = totalObligations - (salary * 0.5);
+                alerts += `
+                    <div class="alert alert-danger">
+                        <div class="alert-title">
+                            🚨 ${currentLang === 'ar' ? 'تحذير: وضع مالي حرج' : 'Critical Financial Situation'}
+                        </div>
+                        <div class="alert-body">
+                            ${currentLang === 'ar'
+                                ? `التزاماتك تشكل ${percentage.toFixed(1)}% من راتبك - هذا وضع غير مستدام. تحتاج إلى تخفيض مصاريفك بمقدار ${formatCurrency(needToCut)} للوصول إلى مستوى صحي (50%).`
+                                : `Your obligations are ${percentage.toFixed(1)}% of your salary - this is unsustainable. You need to reduce expenses by ${formatCurrency(needToCut)} to reach a healthy level (50%).`
+                            }
+                            <ul>
+                                <li>${currentLang === 'ar' ? 'راجع جميع المصاريف غير الضرورية فوراً' : 'Review all optional expenses immediately'}</li>
+                                <li>${currentLang === 'ar' ? 'فكر في إعادة التفاوض على القروض' : 'Consider renegotiating loans'}</li>
+                                <li>${currentLang === 'ar' ? 'ابحث عن مصادر دخل إضافية' : 'Look for additional income sources'}</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }
+            // Warning: 50-70%
+            else if (percentage > 50) {
+                const needToCut = totalObligations - (salary * 0.5);
+                alerts += `
+                    <div class="alert alert-warning">
+                        <div class="alert-title">
+                            ⚠️ ${currentLang === 'ar' ? 'تنبيه: التزامات مرتفعة' : 'High Obligations Warning'}
+                        </div>
+                        <div class="alert-body">
+                            ${currentLang === 'ar'
+                                ? `التزاماتك تشكل ${percentage.toFixed(1)}% من راتبك، أعلى من النسبة الصحية (50%). للوصول لوضع مريح، خفّض مصاريفك بمقدار ${formatCurrency(needToCut)}.`
+                                : `Your obligations are ${percentage.toFixed(1)}% of your salary, above the healthy threshold (50%). To reach a comfortable position, reduce expenses by ${formatCurrency(needToCut)}.`
+                            }
+                        </div>
+                    </div>
+                `;
+            }
+            // Success: ≤ 50%
+            else if (percentage > 0) {
+                alerts += `
+                    <div class="alert alert-success">
+                        <div class="alert-title">
+                            ✅ ${currentLang === 'ar' ? 'ممتاز! وضع مالي صحي' : 'Excellent! Healthy Financial Position'}
+                        </div>
+                        <div class="alert-body">
+                            ${currentLang === 'ar'
+                                ? `التزاماتك ${percentage.toFixed(1)}% من راتبك، ضمن النطاق الصحي. احرص على ادخار ${formatCurrency(surplus * 0.175)} شهرياً (17.5%)، ويبقى لديك ${formatCurrency(safeSpending)} للمصروف الشخصي.`
+                                : `Your obligations are ${percentage.toFixed(1)}% of your salary, within the healthy range. Save ${formatCurrency(surplus * 0.175)} monthly (17.5%), and you'll have ${formatCurrency(safeSpending)} for personal spending.`
+                            }
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Optional expenses tip
+            if (optionalTotal > 0 && percentage > 40) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <div class="alert-title">
+                            💡 ${currentLang === 'ar' ? 'فرصة للتحسين' : 'Optimization Opportunity'}
+                        </div>
+                        <div class="alert-body">
+                            ${currentLang === 'ar'
+                                ? `لديك ${formatCurrency(optionalTotal)} في مصاريف غير ضرورية. تخفيضها سيحسن وضعك المالي بشكل كبير.`
+                                : `You have ${formatCurrency(optionalTotal)} in optional expenses. Reducing these will significantly improve your financial health.`
+                            }
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = alerts;
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>

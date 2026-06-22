@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة Snowball للقروض | the.budgetr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #d1fae5;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+            --shadow: rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+            padding-bottom: 3rem;
+        }
+
+        body[dir="ltr"] { font-family: 'Inter', -apple-system, sans-serif; }
+
+        .container { max-width: 860px; margin: 0 auto; padding: 1rem; }
+
+        /* ─── Header ─── */
+        .header {
+            background: #0D5C63;
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            top: -120px; right: -80px;
+            border: 40px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #FFF8F0;
+            margin-bottom: 0.25rem;
+            direction: ltr;
+        }
+
+        .logo span { color: #F4845F; }
+
+        .header-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #FFF8F0;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-sub {
+            color: rgba(255,248,240,0.75);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-quote {
+            background: rgba(255,248,240,0.1);
+            border: 1px solid rgba(255,248,240,0.2);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: rgba(255,248,240,0.9);
+            font-size: 0.95rem;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-control {
+            background: rgba(255,248,240,0.15);
+            border: 2px solid rgba(255,248,240,0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            color: #FFF8F0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-control:hover {
+            background: rgba(255,248,240,0.25);
+            border-color: rgba(255,248,240,0.5);
+        }
+
+        select.btn-control option { color: var(--text-primary); background: white; }
+
+        /* ─── Card ─── */
+        .card {
+            background: var(--card-bg);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ─── Form ─── */
+        .form-group { margin-bottom: 1.25rem; }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        /* ─── Loan Items ─── */
+        .loans-list { margin-bottom: 1.25rem; }
+
+        .loan-item {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            animation: slideIn 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .loan-number {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .btn-delete-loan {
+            background: #fee2e2;
+            color: var(--danger);
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .btn-delete-loan:hover { background: var(--danger); color: white; }
+
+        .loan-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 480px) { .loan-grid { grid-template-columns: 1fr; } }
+
+        /* ─── Buttons ─── */
+        .btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover { border-color: var(--primary); }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 2px solid #fecaca;
+        }
+
+        .btn-danger:hover { background: var(--danger); color: white; }
+
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        /* ─── Results ─── */
+        .results { display: none; }
+        .results.active { display: block; animation: fadeIn 0.5s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Before vs After */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 500px) { .comparison-grid { grid-template-columns: 1fr; } }
+
+        .comparison-box {
+            padding: 1.5rem;
+            border-radius: 14px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .comparison-box.before {
+            background: #fef3c7;
+            border-color: var(--warning);
+        }
+
+        .comparison-box.after {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .comparison-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .comparison-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .comparison-sub {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Saving Banner */
+        .saving-banner {
+            background: linear-gradient(135deg, #0D5C63, #10b981);
+            border-radius: 14px;
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .saving-banner-title {
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-bottom: 0.5rem;
+        }
+
+        .saving-banner-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .saving-banner-sub {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Loan order */
+        .loan-order-list { margin-bottom: 1.5rem; }
+
+        .loan-order-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .loan-order-num {
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .loan-order-info { flex: 1; }
+
+        .loan-order-name { font-weight: 700; font-size: 1rem; }
+
+        .loan-order-details {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.1rem;
+        }
+
+        .loan-order-badge {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 0.3rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Milestone Table */
+        .milestone-table { overflow-x: auto; }
+
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .breakdown-table th {
+            background: #0D5C63;
+            color: white;
+            padding: 0.9rem;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .breakdown-table td {
+            padding: 0.9rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .breakdown-table tr:last-child td { border-bottom: none; }
+        .breakdown-table tr:hover { background: #f0fdf4; }
+
+        .td-highlight { color: var(--primary); font-weight: 700; }
+        .td-paid { color: var(--danger); font-weight: 600; font-size: 0.8rem; }
+
+        /* Share */
+        .share-box {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .share-text {
+            background: white;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-align: right;
+            line-height: 1.8;
+        }
+
+        body[dir="ltr"] .share-text { text-align: left; }
+
+        .btn-copy {
+            background: #0D5C63;
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .btn-copy:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-copy.copied { background: var(--primary); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .card { padding: 1.25rem 1rem; }
+            .header { padding: 1.5rem 1rem; }
+            .comparison-value { font-size: 2rem; }
+            .saving-banner-value { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body dir="rtl">
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo"><span>the.</span>budgetr</div>
+        <div class="header-title" data-ar="حاسبة Snowball للقروض ❄️" data-en="Snowball Debt Calculator ❄️">حاسبة Snowball للقروض ❄️</div>
+        <div class="header-sub" data-ar="شوف كم شهر تقدر تختصر بدون ما تزيد دخلك" data-en="See how many months you can save without increasing your income">شوف كم شهر تقدر تختصر بدون ما تزيد دخلك</div>
+        <div class="header-quote" id="headerQuote">
+            فقط بإعادة ترتيب طريقة السداد
+        </div>
+        <div class="controls">
+            <button class="btn-control" onclick="toggleLanguage()"><span id="langBtn">English</span></button>
+            <select class="btn-control" id="currencySelect" onchange="updateCurrency()">
+                <option value="KWD">🇰🇼 د.ك - دينار كويتي</option>
+                <option value="SAR">🇸🇦 ر.س - ريال سعودي</option>
+                <option value="AED">🇦🇪 د.إ - درهم إماراتي</option>
+                <option value="QAR">🇶🇦 ر.ق - ريال قطري</option>
+                <option value="BHD">🇧🇭 د.ب - دينار بحريني</option>
+                <option value="OMR">🇴🇲 ر.ع - ريال عماني</option>
+                <option value="USD">🇺🇸 $ - دولار أمريكي</option>
+                <option value="EUR">🇪🇺 € - يورو</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Loans Input -->
+    <div class="card">
+        <h2 class="card-title">
+            <span>📋</span>
+            <span data-ar="قروضك الحالية" data-en="Your Current Loans">قروضك الحالية</span>
+        </h2>
+
+        <div class="loans-list" id="loansList"></div>
+
+        <button class="btn btn-secondary" onclick="addLoan()">
+            <span data-ar="+ إضافة قرض جديد" data-en="+ Add New Loan">+ إضافة قرض جديد</span>
+        </button>
+    </div>
+
+    <!-- Extra Payment -->
+    <div class="card">
+        <h2 class="card-title">
+            <span>💪</span>
+            <span data-ar="المبلغ الإضافي الشهري" data-en="Extra Monthly Payment">المبلغ الإضافي الشهري</span>
+        </h2>
+        <div class="form-group">
+            <label class="form-label" data-ar="كم تقدر تزيد شهرياً فوق الأقساط العادية؟" data-en="How much extra can you pay monthly above regular installments?">كم تقدر تزيد شهرياً فوق الأقساط العادية؟</label>
+            <input type="number" class="form-input" id="extraPayment" placeholder="0" value="0">
+        </div>
+        <div style="font-size:0.85rem; color:var(--text-secondary);" data-ar="💡 حتى لو صفر - الـ Snowball يشتغل بدونه عن طريق إعادة ترتيب القروض" data-en="💡 Even if 0 - Snowball still works by reordering your loans">
+            💡 حتى لو صفر - الـ Snowball يشتغل بدونه عن طريق إعادة ترتيب القروض
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="calculate()">
+                <span data-ar="احسب الآن 🧮" data-en="Calculate Now 🧮">احسب الآن 🧮</span>
+            </button>
+            <button class="btn btn-danger" onclick="resetAll()">
+                <span data-ar="مسح البيانات 🗑️" data-en="Clear All 🗑️">مسح البيانات 🗑️</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="results" id="results">
+
+        <!-- Before vs After -->
+        <div class="card">
+            <h2 class="card-title">
+                <span>📊</span>
+                <span data-ar="النتيجة" data-en="Results">النتيجة</span>
+            </h2>
+
+            <div class="comparison-grid">
+                <div class="comparison-box before">
+                    <div class="comparison-label" data-ar="⏳ بدون Snowball" data-en="⏳ Without Snowball">⏳ بدون Snowball</div>
+                    <div class="comparison-value" id="beforeMonths">0</div>
+                    <div class="comparison-sub" data-ar="شهر" data-en="months">شهر</div>
+                </div>
+                <div class="comparison-box after">
+                    <div class="comparison-label" data-ar="❄️ مع Snowball" data-en="❄️ With Snowball">❄️ مع Snowball</div>
+                    <div class="comparison-value" id="afterMonths">0</div>
+                    <div class="comparison-sub" data-ar="شهر" data-en="months">شهر</div>
+                </div>
+            </div>
+
+            <!-- Saving Banner -->
+            <div class="saving-banner">
+                <div class="saving-banner-title" data-ar="🎉 راح تختصر" data-en="🎉 You'll save">🎉 راح تختصر</div>
+                <div class="saving-banner-value" id="savedMonths">0 <span data-ar="شهر" data-en="months">شهر</span></div>
+                <div class="saving-banner-sub" id="freedAmount"></div>
+            </div>
+
+            <!-- Freed payments -->
+            <div style="background:var(--bg); border:2px solid var(--border); border-radius:12px; padding:1.25rem; text-align:center;">
+                <div style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:0.5rem;" data-ar="الأقساط التي ستتحرر بعد الانتهاء" data-en="Monthly payments freed after finishing">الأقساط التي ستتحرر بعد الانتهاء</div>
+                <div style="font-size:1.8rem; font-weight:700; color:var(--primary);" id="freedPayments">0</div>
+                <div style="font-size:0.85rem; color:var(--text-secondary);" data-ar="شهرياً" data-en="per month">شهرياً</div>
+            </div>
+        </div>
+
+        <!-- Methodology Explanation -->
+        <div class="card">
+            <h2 class="card-title">
+                <span>📖</span>
+                <span data-ar="شلون تطبق الطريقة؟" data-en="How to Apply the Method?">شلون تطبق الطريقة؟</span>
+            </h2>
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+
+                <div style="display:flex; gap:1rem; align-items:flex-start;">
+                    <div style="background:var(--primary);color:white;min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;">1</div>
+                    <div>
+                        <div style="font-weight:700;margin-bottom:0.25rem;" data-ar="ادفع الحد الأدنى على كل قروضك" data-en="Pay the minimum on all your loans">ادفع الحد الأدنى على كل قروضك</div>
+                        <div style="color:var(--text-secondary);font-size:0.9rem;" data-ar="خليهم كلهم يمشون بشكل عادي بدون تأخير" data-en="Keep all loans running normally without delays">خليهم كلهم يمشون بشكل عادي بدون تأخير</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:1rem; align-items:flex-start;">
+                    <div style="background:var(--primary);color:white;min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;">2</div>
+                    <div>
+                        <div style="font-weight:700;margin-bottom:0.25rem;" data-ar="ركّز على القرض الأصغر أولاً 🎯" data-en="Focus on the smallest loan first 🎯">ركّز على القرض الأصغر أولاً 🎯</div>
+                        <div style="color:var(--text-secondary);font-size:0.9rem;" data-ar="أي مبلغ إضافي عندك، حطه كله على القرض الأول في الترتيب" data-en="Any extra money you have, throw it all at the first loan in the list">أي مبلغ إضافي عندك، حطه كله على القرض الأول في الترتيب</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:1rem; align-items:flex-start;">
+                    <div style="background:var(--primary);color:white;min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;">3</div>
+                    <div>
+                        <div style="font-weight:700;margin-bottom:0.25rem;" data-ar="لما ينتهي القرض الأول، انقل قسطه للثاني ❄️" data-en="When the first loan is done, roll its payment to the next ❄️">لما ينتهي القرض الأول، انقل قسطه للثاني ❄️</div>
+                        <div style="color:var(--text-secondary);font-size:0.9rem;" data-ar="مثلاً: خلصت قرض قسطه 50 د.ك؟ أضفهم على قسط القرض الثاني. تصير تدفع أكثر بدون ما تحس" data-en="e.g., Finished a 50 KD loan? Add it to the next payment. You pay more without feeling it">مثلاً: خلصت قرض قسطه 50 د.ك؟ أضفهم على قسط القرض الثاني. تصير تدفع أكثر بدون ما تحس</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:1rem; align-items:flex-start;">
+                    <div style="background:var(--primary);color:white;min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;">4</div>
+                    <div>
+                        <div style="font-weight:700;margin-bottom:0.25rem;" data-ar="كرر إلى أن تخلص كل القروض 🏁" data-en="Repeat until all loans are gone 🏁">كرر إلى أن تخلص كل القروض 🏁</div>
+                        <div style="color:var(--text-secondary);font-size:0.9rem;" data-ar="كل ما خلصت قرض، الكرة تكبر وتسدد أسرع وأسرع" data-en="Every time you finish a loan, the snowball grows and you pay off faster and faster">كل ما خلصت قرض، الكرة تكبر وتسدد أسرع وأسرع</div>
+                    </div>
+                </div>
+
+                <div style="background:#f0fdf4;border:2px solid var(--primary);border-radius:12px;padding:1rem;margin-top:0.5rem;">
+                    <div style="color:var(--primary-dark);font-size:0.9rem;font-weight:600;" data-ar="💡 السر: ما تزيد دخلك، فقط تعيد ترتيب طريقة السداد. الكرة الثلجية تكبر لوحدها!" data-en="💡 The secret: You don't increase income, you just reorder how you pay. The snowball grows by itself!">💡 السر: ما تزيد دخلك، فقط تعيد ترتيب طريقة السداد. الكرة الثلجية تكبر لوحدها!</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Snowball Order -->
+        <div class="card">
+            <h2 class="card-title">
+                <span>❄️</span>
+                <span data-ar="ترتيب السداد (من الأصغر للأكبر)" data-en="Payoff Order (Smallest to Largest)">ترتيب السداد (من الأصغر للأكبر)</span>
+            </h2>
+            <div class="loan-order-list" id="loanOrder"></div>
+        </div>
+
+        <!-- Milestone Table -->
+        <div class="card">
+            <h2 class="card-title">
+                <span>📅</span>
+                <span data-ar="جدول التقدم" data-en="Progress Milestones">جدول التقدم</span>
+            </h2>
+            <div class="milestone-table">
+                <table class="breakdown-table">
+                    <thead>
+                        <tr>
+                            <th data-ar="الشهر" data-en="Month">الشهر</th>
+                            <th data-ar="المدفوع هذا الشهر" data-en="Paid This Month">المدفوع هذا الشهر</th>
+                            <th data-ar="القروض المتبقية" data-en="Remaining Loans">القروض المتبقية</th>
+                            <th data-ar="إجمالي المتبقي" data-en="Total Remaining">إجمالي المتبقي</th>
+                        </tr>
+                    </thead>
+                    <tbody id="milestoneBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Share -->
+        <div class="card">
+            <h2 class="card-title">
+                <span>📤</span>
+                <span data-ar="شارك نتيجتك" data-en="Share Your Result">شارك نتيجتك</span>
+            </h2>
+            <div class="share-box">
+                <div class="share-text" id="shareText"></div>
+                <button class="btn-copy" id="copyBtn" onclick="copyResult()">
+                    <span data-ar="📋 انسخ النتيجة" data-en="📋 Copy Result">📋 انسخ النتيجة</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <a href="https://instagram.com/the.budgetr" target="_blank">@the.budgetr</a>
+    </div>
+
+</div>
+
+<script>
+    let currentLang = 'ar';
+    let currentCurrency = 'KWD';
+    let loanCount = 0;
+
+    const currencySymbols = {
+        KWD: 'د.ك', SAR: 'ر.س', AED: 'د.إ',
+        QAR: 'ر.ق', BHD: 'د.ب', OMR: 'ر.ع',
+        USD: '$', EUR: '€'
+    };
+
+    const currencyEn = {
+        KWD: 'KWD', SAR: 'SAR', AED: 'AED',
+        QAR: 'QAR', BHD: 'BHD', OMR: 'OMR',
+        USD: 'USD', EUR: 'EUR'
+    };
+
+    function fmt(amount) {
+        const sym = currentLang === 'ar' ? currencySymbols[currentCurrency] : currencyEn[currentCurrency];
+        const num = Math.round(amount).toLocaleString('en-US');
+        return currentLang === 'ar' ? `${num} ${sym}` : `${sym} ${num}`;
+    }
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+        document.getElementById('langBtn').textContent = currentLang === 'ar' ? 'English' : 'العربية';
+        document.querySelectorAll('[data-ar]').forEach(el => {
+            el.textContent = el.getAttribute(`data-${currentLang}`);
+        });
+        document.getElementById('headerQuote').textContent = currentLang === 'ar'
+            ? 'فقط بإعادة ترتيب طريقة السداد'
+            : 'Just by reordering how you pay your debts';
+        updateLoanLabels();
+    }
+
+    function updateCurrency() {
+        currentCurrency = document.getElementById('currencySelect').value;
+    }
+
+    function addLoan() {
+        loanCount++;
+        const id = loanCount;
+        const list = document.getElementById('loansList');
+        const div = document.createElement('div');
+        div.className = 'loan-item';
+        div.id = `loan-${id}`;
+        div.innerHTML = `
+            <div class="loan-header">
+                <span class="loan-number">${currentLang === 'ar' ? 'قرض' : 'Loan'} ${id}</span>
+                <button class="btn-delete-loan" onclick="deleteLoan(${id})">
+                    ${currentLang === 'ar' ? '× حذف' : '× Delete'}
+                </button>
+            </div>
+            <div class="loan-grid">
+
+                <div class="form-group">
+                    <label class="form-label">${currentLang === 'ar' ? 'القسط الشهري' : 'Monthly Installment'}</label>
+                    <input type="number" class="form-input loan-payment" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">${currentLang === 'ar' ? 'أدخل عن طريق:' : 'Enter via:'}</label>
+                    <div style="display:flex;gap:0.5rem;">
+                        <button type="button" onclick="switchMode(${id},'balance')" id="btn-bal-${id}"
+                            style="flex:1;padding:0.6rem;border-radius:10px;border:2px solid var(--primary);background:var(--primary);color:white;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s;">
+                            ${currentLang === 'ar' ? '💰 المبلغ المتبقي' : '💰 Total Balance'}
+                        </button>
+                        <button type="button" onclick="switchMode(${id},'months')" id="btn-mo-${id}"
+                            style="flex:1;padding:0.6rem;border-radius:10px;border:2px solid var(--border);background:var(--bg);color:var(--text-secondary);font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s;">
+                            ${currentLang === 'ar' ? '📅 الأشهر المتبقية' : '📅 Remaining Months'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="inp-bal-${id}" class="form-group">
+                <label class="form-label">${currentLang === 'ar' ? 'المبلغ المتبقي' : 'Remaining Balance'}</label>
+                <input type="number" class="form-input loan-balance" placeholder="0">
+            </div>
+            <div id="inp-mo-${id}" class="form-group" style="display:none;">
+                <label class="form-label">${currentLang === 'ar' ? 'الأشهر المتبقية' : 'Remaining Months'}</label>
+                <input type="number" class="form-input loan-months" placeholder="0">
+            </div>
+        `;
+        list.appendChild(div);
+    }
+
+    function switchMode(id, mode) {
+        const balBtn = document.getElementById(`btn-bal-${id}`);
+        const moBtn  = document.getElementById(`btn-mo-${id}`);
+        const balInp = document.getElementById(`inp-bal-${id}`);
+        const moInp  = document.getElementById(`inp-mo-${id}`);
+
+        if (mode === 'balance') {
+            balBtn.style.background = 'var(--primary)';
+            balBtn.style.color = 'white';
+            balBtn.style.borderColor = 'var(--primary)';
+            moBtn.style.background = 'var(--bg)';
+            moBtn.style.color = 'var(--text-secondary)';
+            moBtn.style.borderColor = 'var(--border)';
+            balInp.style.display = 'block';
+            moInp.style.display = 'none';
+        } else {
+            moBtn.style.background = 'var(--primary)';
+            moBtn.style.color = 'white';
+            moBtn.style.borderColor = 'var(--primary)';
+            balBtn.style.background = 'var(--bg)';
+            balBtn.style.color = 'var(--text-secondary)';
+            balBtn.style.borderColor = 'var(--border)';
+            moInp.style.display = 'block';
+            balInp.style.display = 'none';
+        }
+    }
+
+    function deleteLoan(id) {
+        const el = document.getElementById(`loan-${id}`);
+        if (el) el.remove();
+    }
+
+    function updateLoanLabels() {
+        document.querySelectorAll('.loan-item').forEach((item, index) => {
+            const num = index + 1;
+            item.querySelector('.loan-number').textContent =
+                `${currentLang === 'ar' ? 'قرض' : 'Loan'} ${num}`;
+            item.querySelector('.btn-delete-loan').textContent =
+                currentLang === 'ar' ? '× حذف' : '× Delete';
+            const labels = item.querySelectorAll('.form-label');
+            const arLabels = ['القسط الشهري', 'أدخل عن طريق:', 'المبلغ المتبقي', 'الأشهر المتبقية'];
+            const enLabels = ['Monthly Installment', 'Enter via:', 'Remaining Balance', 'Remaining Months'];
+            labels.forEach((lbl, i) => {
+                lbl.textContent = currentLang === 'ar' ? arLabels[i] : enLabels[i];
+            });
+        });
+    }
+
+    function getLoans() {
+        const items = document.querySelectorAll('.loan-item');
+        const loans = [];
+        items.forEach(item => {
+
+            const payment = parseFloat(item.querySelector('.loan-payment').value) || 0;
+
+            const balInput = item.querySelector('.loan-balance');
+            const moInput  = item.querySelector('.loan-months');
+
+            let balance = 0, months = 0;
+
+            // Figure out which mode is active (whichever field is visible)
+            if (balInput && balInput.closest('.form-group').style.display !== 'none') {
+                balance = parseFloat(balInput.value) || 0;
+                months  = payment > 0 && balance > 0 ? Math.ceil(balance / payment) : 0;
+            } else if (moInput && moInput.closest('.form-group').style.display !== 'none') {
+                months  = parseInt(moInput.value) || 0;
+                balance = payment * months;
+            }
+
+            if (payment > 0 && (balance > 0 || months > 0)) {
+                loans.push({ name: (currentLang === 'ar' ? 'قرض' : 'Loan'), balance, payment, months });
+            }
+        });
+        return loans;
+    }
+
+    function simulateWithoutSnowball(loans) {
+        // Proper simulation: each loan pays its own installment only, no snowball rollover
+        let queue = loans.map(l => ({ ...l, remaining: l.balance }));
+        let month = 0;
+
+        while (queue.some(l => l.remaining > 0) && month < 600) {
+            month++;
+            queue.forEach(loan => {
+                if (loan.remaining <= 0) return;
+                loan.remaining = Math.max(0, loan.remaining - loan.payment);
+            });
+        }
+        return month;
+    }
+
+    function simulateSnowball(loans, extra) {
+        // Sort by balance ascending (snowball method)
+        let queue = loans.map(l => ({ ...l, remaining: l.balance })).sort((a, b) => a.balance - b.balance);
+        let month = 0;
+        let freed = 0; // payments freed from paid-off loans
+        const milestones = [1, 6, 12, 18, 24, 36, 48, 60, 72, 84, 96];
+        const milestoneData = [];
+
+        while (queue.some(l => l.remaining > 0) && month < 600) {
+            month++;
+            let snowball = extra + freed;
+
+            for (let i = 0; i < queue.length; i++) {
+                const loan = queue[i];
+                if (loan.remaining <= 0) continue;
+
+                let pay = loan.payment;
+                // First loan in queue gets the snowball
+                if (i === 0) pay += snowball;
+
+                if (loan.remaining <= pay) {
+                    // Loan paid off this month
+                    freed += loan.payment;
+                    loan.remaining = 0;
+                } else {
+                    loan.remaining -= pay;
+                }
+            }
+
+            // Capture milestone
+            if (milestones.includes(month) || queue.every(l => l.remaining <= 0)) {
+                const totalRemaining = queue.reduce((s, l) => s + Math.max(0, l.remaining), 0);
+                const activeLoans = queue.filter(l => l.remaining > 0).length;
+                const totalPaid = (extra + freed + queue.reduce((s,l) => s + l.payment, 0));
+                milestoneData.push({ month, totalPaid, activeLoans, totalRemaining });
+                if (queue.every(l => l.remaining <= 0)) break;
+            }
+        }
+
+        return { months: month, freed: freed + queue.reduce((s, l) => s + l.payment, 0), milestoneData, sortedLoans: queue };
+    }
+
+    function calculate() {
+        const loans = getLoans();
+        if (loans.length === 0) {
+            alert(currentLang === 'ar' ? 'الرجاء إضافة قرض واحد على الأقل' : 'Please add at least one loan');
+            return;
+        }
+
+        const extra = parseFloat(document.getElementById('extraPayment').value) || 0;
+        const beforeMonths = simulateWithoutSnowball(loans);
+        const { months: afterMonths, freed, milestoneData, sortedLoans } = simulateSnowball(loans, extra);
+        const saved = Math.max(0, beforeMonths - afterMonths);
+        const totalMonthlyPayments = loans.reduce((s, l) => s + l.payment, 0);
+
+        // Update comparison
+        document.getElementById('beforeMonths').textContent = beforeMonths;
+        document.getElementById('afterMonths').textContent = afterMonths;
+        document.getElementById('savedMonths').innerHTML =
+            `${saved} <span data-ar="شهر" data-en="months">${currentLang === 'ar' ? 'شهر' : 'months'}</span>`;
+        document.getElementById('freedPayments').textContent = fmt(totalMonthlyPayments);
+
+        // Loan order
+        const orderEl = document.getElementById('loanOrder');
+        const sorted = [...loans].sort((a, b) => a.balance - b.balance);
+        orderEl.innerHTML = sorted.map((loan, i) => `
+            <div class="loan-order-item">
+                <div class="loan-order-num">${i + 1}</div>
+                <div class="loan-order-info">
+                    <div class="loan-order-name">${loan.name}</div>
+                    <div class="loan-order-details">
+                        ${currentLang === 'ar' ? 'المتبقي:' : 'Remaining:'} ${fmt(loan.balance)} •
+                        ${currentLang === 'ar' ? 'القسط:' : 'Installment:'} ${fmt(loan.payment)}
+                    </div>
+                </div>
+                <div class="loan-order-badge">${i === 0 ? (currentLang === 'ar' ? '🎯 ابدأ هنا' : '🎯 Start Here') : (currentLang === 'ar' ? `الخطوة ${i + 1}` : `Step ${i + 1}`)}</div>
+            </div>
+        `).join('');
+
+        // Milestone table
+        const tbody = document.getElementById('milestoneBody');
+        tbody.innerHTML = milestoneData.map(m => `
+            <tr>
+                <td><strong>${currentLang === 'ar' ? 'شهر' : 'Month'} ${m.month}</strong></td>
+                <td>${fmt(m.totalPaid)}</td>
+                <td>${m.activeLoans > 0 ? `${m.activeLoans} ${currentLang === 'ar' ? 'قروض' : 'loans'}` : `<span class="td-paid">${currentLang === 'ar' ? '✅ منتهي' : '✅ Done'}</span>`}</td>
+                <td class="${m.totalRemaining === 0 ? 'td-paid' : 'td-highlight'}">${m.totalRemaining === 0 ? (currentLang === 'ar' ? '✅ صفر' : '✅ Zero') : fmt(m.totalRemaining)}</td>
+            </tr>
+        `).join('');
+
+        // Share text
+        const shareMsg = currentLang === 'ar'
+            ? `طبّقت طريقة Snowball على قروضي واكتشفت إني أقدر أختصر ${saved} شهر من مدة القروض! 🎯\n\nبدلاً من ${beforeMonths} شهر، راح أخلص خلال ${afterMonths} شهر فقط.\n\nجرّب الحاسبة على the.budgetr 👇`
+            : `I applied the Snowball method to my loans and discovered I can save ${saved} months! 🎯\n\nInstead of ${beforeMonths} months, I'll be debt-free in just ${afterMonths} months.\n\nTry the calculator on the.budgetr 👇`;
+
+        document.getElementById('shareText').textContent = shareMsg;
+
+        document.getElementById('results').classList.add('active');
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyResult() {
+        const text = document.getElementById('shareText').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById('copyBtn');
+            btn.classList.add('copied');
+            btn.textContent = currentLang === 'ar' ? '✅ تم النسخ!' : '✅ Copied!';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = `<span data-ar="📋 انسخ النتيجة" data-en="📋 Copy Result">${currentLang === 'ar' ? '📋 انسخ النتيجة' : '📋 Copy Result'}</span>`;
+            }, 2500);
+        });
+    }
+
+    function resetAll() {
+        if (!confirm(currentLang === 'ar' ? 'تبي تمسح كل البيانات؟' : 'Clear all data?')) return;
+        document.getElementById('loansList').innerHTML = '';
+        document.getElementById('extraPayment').value = '0';
+        document.getElementById('results').classList.remove('active');
+        loanCount = 0;
+    }
+
+    // Start with 2 default loans
+    addLoan();
+    addLoan();
+</script>
+</body>
+</html>
